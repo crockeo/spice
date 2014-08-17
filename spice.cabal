@@ -14,6 +14,7 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:     FRP.Spice.Config
+                       FRP.Spice.Math.Vector
 
   hs-source-dirs:      src/
 
