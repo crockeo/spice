@@ -13,14 +13,15 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  -- exposed-modules:     
+  exposed-modules:     FRP.Spice.Config
 
   hs-source-dirs:      src/
 
-  build-depends:       base       == 4.7.*
-               ,       elerea     == 2.7.*
-               ,       GLFW       == 0.5.*
-               ,       containers == 0.5.*
+  build-depends:       base         == 4.7.*
+               ,       elerea       == 2.7.*
+               ,       GLFW         == 0.5.*
+               ,       containers   == 0.5.*
+               ,       data-default == 0.5.*
                ,       OpenGL
 
   default-language:    Haskell2010
