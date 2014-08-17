@@ -1,0 +1,26 @@
+name:                spice
+version:             0.1.0.0
+synopsis:            An FRP-based game engine written in Haskell.
+description:         An FRP-based game engine written in Haskell. - See the homepage for more information.
+homepage:            http://github.com/crockeo/spice
+license:             MIT
+license-file:        LICENSE
+author:              Cerek Hillen
+maintainer:          Cerek Hillen <cerekh@gmail.com>
+copyright:           2014
+category:            FRP
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  -- exposed-modules:     
+
+  hs-source-dirs:      src/
+
+  build-depends:       base       == 4.7.*
+               ,       elerea     == 2.7.*
+               ,       GLFW       == 0.5.*
+               ,       containers == 0.5.*
+               ,       OpenGL
+
+  default-language:    Haskell2010

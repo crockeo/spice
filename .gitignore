@@ -1,0 +1,4 @@
+# Bad cabal files
+cabal.sandbox.config
+.cabal-sandbox/
+dist/
