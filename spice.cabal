@@ -16,8 +16,9 @@ library
   exposed-modules:     FRP.Spice.Config
                        FRP.Spice.Game
                        FRP.Spice.Input
-                       FRP.Spice.Input.Mouse
                        FRP.Spice.Input.Keyboard
+                       FRP.Spice.Input.Mouse
+                       FRP.Spice.Input.MousePosition
                        FRP.Spice.Math.Vector
 
   hs-source-dirs:      src/
