@@ -9,5 +9,5 @@ import FRP.Spice.Input
 
 -- The game instance, to be used with updating and rendering
 class Game a where
-  update :: Input -> a -> a
+  update :: Float -> Input -> a -> a
   render :: a -> IO ()
