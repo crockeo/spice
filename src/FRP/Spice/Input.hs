@@ -1,4 +1,12 @@
-module FRP.Spice.Input where
+module FRP.Spice.Input ( module Rexport
+                       , Sinks (..)
+                       , Input (..)
+                       , InputContainer (..)
+                       , makeInputContainer
+                       , makeMousePositionCallback
+                       , makeKeyboardCallback
+                       , makeMouseCallback
+                       ) where
 
 --------------------
 -- Global Imports --
@@ -14,6 +22,11 @@ import qualified FRP.Spice.Input.MousePosition as MousePosition
 import qualified FRP.Spice.Input.Keyboard as Keyboard
 import qualified FRP.Spice.Input.Mouse as Mouse
 import FRP.Spice.Math.Vector
+
+-----------------------
+-- Rexported Imports --
+import Data.Map.Strict  as Rexport ((!))
+import Graphics.UI.GLFW as Rexport (Key (..), SpecialKey (..), MouseButton (..))
 
 ----------
 -- Code --
