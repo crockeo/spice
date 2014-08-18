@@ -4,6 +4,7 @@ module FRP.Spice.Input.Mouse where
 -- Global Imports --
 import qualified Data.Traversable as T (sequence)
 import Data.Map.Strict hiding (keys, map)
+import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
 import FRP.Elerea.Param
 import Control.Monad
@@ -49,15 +50,3 @@ updateSinks map =
     map ! b $ case val of
                 Press   -> True
                 Release -> False
-
--- The mouse position external
-position :: IO (Signal (Vector Float), Vector Float -> IO ())
-position = external def
-
--- The signal for the mouse
-pSignal :: (Signal (Vector Float), Vector Float -> IO ()) -> Signal (Vector Float)
-pSignal = fst
-
--- The sink for the mouse
-pSink :: (Signal (Vector Float), Vector Float -> IO ()) -> (Vector Float -> IO ())
-pSink = snd
