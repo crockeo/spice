@@ -2,6 +2,7 @@ module FRP.Spice.Input.Keyboard where
 
 --------------------
 -- Global Imports --
+import qualified Data.Traversable as T
 import Data.Map.Strict hiding (keys, map)
 import Graphics.UI.GLFW as GLFW
 import FRP.Elerea.Param
@@ -19,12 +20,12 @@ externals :: IO (Map Key (Signal Bool, Bool -> IO ()))
 externals = liftM fromList $ sequence $ map (\k -> liftM ((,) k) $ external False) keys
 
 -- Getting the signals from the externals
-signals :: Map Key (Signal Bool, Bool -> IO ()) -> IO (Signal (Map Key Bool))
-signals map = undefined
+signals :: Map Key (Signal Bool, Bool -> IO ()) -> Signal (Map Key Bool)
+signals map = T.sequence $ fmap fst map
 
 -- Getting the sinks from the externals
-sinks :: Map Key (Signal Bool, Bool -> IO ()) -> IO (Map Key (Bool -> IO ()))
-sinks map = return $ fmap (snd) map
+sinks :: Map Key (Signal Bool, Bool -> IO ()) -> Map Key (Bool -> IO ())
+sinks map = fmap snd map
 
 -- Updating the sinks
 updateSinks :: Map Key (Bool -> IO ()) -> IO ()
