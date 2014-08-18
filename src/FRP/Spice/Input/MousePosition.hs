@@ -20,11 +20,5 @@ signals :: (Signal (Vector Float), Vector Float -> IO ()) -> Signal (Vector Floa
 signals = fst
 
 -- Getting the signal from the external
-sinks :: (Signal (Vector Float), Vector Float -> IO ()) -> (Vector Float -> IO ())
+sinks :: (Signal (Vector Float), Vector Float -> IO ()) -> Vector Float -> IO ()
 sinks = snd
-
--- Updating the position sink
-updateSinks :: (Vector Float -> IO ()) -> IO ()
-updateSinks fn = do
-  Position x y <- get GLFW.mousePos
-  fn $ Vector ((fromIntegral x) / 320 - 1) (-((fromIntegral y) / 240 - 1))

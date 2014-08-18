@@ -32,21 +32,12 @@ buttons = [ ButtonLeft
 
 -- Getting externals for all of the buttons
 externals :: IO (Map MouseButton (Signal Bool, Bool -> IO ()))
-externals = liftM fromList $ sequence $ map (\k -> liftM ((,) k) $ external False) buttons
+externals = liftM fromList $ mapM (\b -> liftM ((,) b) $ external False) buttons
 
 -- Getting the signals from the externals
 signals :: Map MouseButton (Signal Bool, Bool -> IO ()) -> Signal (Map MouseButton Bool)
-signals map = T.sequence $ fmap fst map
+signals = T.sequence . fmap fst
 
 -- Getting the sinks from the externals
 sinks :: Map MouseButton (Signal Bool, Bool -> IO ()) -> Map MouseButton (Bool -> IO ())
-sinks map = fmap snd map
-
--- Updating the sinks
-updateSinks :: Map MouseButton (Bool -> IO ()) -> IO ()
-updateSinks map =
-  forM_ buttons $ \b -> do
-    val <- getMouseButton b
-    map ! b $ case val of
-                Press   -> True
-                Release -> False
+sinks = fmap snd

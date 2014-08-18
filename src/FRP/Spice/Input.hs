@@ -3,6 +3,7 @@ module FRP.Spice.Input where
 --------------------
 -- Global Imports --
 import Data.Map.Strict hiding (keys, map)
+import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
 import Control.Applicative
 import FRP.Elerea.Param
@@ -45,17 +46,32 @@ makeInputContainer = do
                     , mouseSinks         = Mouse.sinks mouseExternals
                     }
 
-  let input = pure Input <*> (fst mousePositionExternals)
-                         <*> (Keyboard.signals keyboardExternals)
-                         <*> (Mouse.signals mouseExternals)
+  let input = do mps <- fst mousePositionExternals
+                 kbs <- Keyboard.signals keyboardExternals
+                 ms  <- Mouse.signals mouseExternals
 
-  return $ InputContainer { getSinks = sinks
-                          , getInput = input
-                          }
+                 return Input { mousePosition = mps
+                              , keyboard      = kbs
+                              , mouse         = ms
+                              }
 
--- Updating the sinks for an InputContainer
-updateSinks :: InputContainer -> IO ()
-updateSinks ic = do
-  Keyboard.updateSinks      $ keyboardSinks      $ getSinks ic
-  Mouse.updateSinks         $ mouseSinks         $ getSinks ic
-  MousePosition.updateSinks $ mousePositionSinks $ getSinks ic
+  return InputContainer { getSinks = sinks
+                        , getInput = input
+                        }
+
+-- Creating callbacks for each type
+makeMousePositionCallback :: InputContainer -> MousePosCallback
+makeMousePositionCallback ic (Position x y) =
+  mousePositionSinks (getSinks ic) $ Vector (fromIntegral x / 320 - 1) ((-fromIntegral y) / 240 - 1)
+
+makeKeyboardCallback :: InputContainer -> KeyCallback
+makeKeyboardCallback ic key state =
+  keyboardSinks (getSinks ic) ! key $ case state of
+    Press   -> True
+    Release -> False
+
+makeMouseCallback :: InputContainer -> MouseButtonCallback
+makeMouseCallback ic button state =
+  mouseSinks (getSinks ic) ! button $ case state of
+    Press   -> True
+    Release -> False

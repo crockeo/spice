@@ -17,21 +17,12 @@ keys = map toEnum [0 .. 318]
 
 -- Getting the externals for all of the keys
 externals :: IO (Map Key (Signal Bool, Bool -> IO ()))
-externals = liftM fromList $ sequence $ map (\k -> liftM ((,) k) $ external False) keys
+externals = liftM fromList $ mapM (\k -> liftM ((,) k) $ external False) keys
 
 -- Getting the signals from the externals
 signals :: Map Key (Signal Bool, Bool -> IO ()) -> Signal (Map Key Bool)
-signals map = T.sequence $ fmap fst map
+signals = T.sequence . fmap fst
 
 -- Getting the sinks from the externals
 sinks :: Map Key (Signal Bool, Bool -> IO ()) -> Map Key (Bool -> IO ())
-sinks map = fmap snd map
-
--- Updating the sinks
-updateSinks :: Map Key (Bool -> IO ()) -> IO ()
-updateSinks map =
-  forM_ keys $ \k -> do
-    val <- getKey k
-    map ! k $ case val of
-                Press   -> True
-                Release -> False
+sinks = fmap snd
