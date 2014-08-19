@@ -1,3 +1,6 @@
+{-|
+  This module need not be used directly. Refer to @'FRP.Spice.Engine'@ instead.
+-}
 module FRP.Spice.Engine.Driver where
 
 --------------------
@@ -7,7 +10,10 @@ import Control.Monad
 ----------
 -- Code --
 
--- Driving a given network
+{-|
+  Driving a network created with the @'FRP.Spice.Engine.Network.makeNetwork'@
+  function and a function such as @'FRP.Spice.Engine.RunInput.runInput'@.
+-}
 driveNetwork :: (a -> IO (IO ())) -> IO (Maybe a) -> IO ()
 driveNetwork network iomdriver = do
   mdriver <- iomdriver

@@ -1,3 +1,6 @@
+{-|
+  This module handles the configuration for the project.
+-}
 module FRP.Spice.Config where
 
 --------------------
@@ -7,7 +10,10 @@ import Data.Default
 ----------
 -- Code --
 
--- The window config
+{-|
+  A datatype to configure the window settings when creating an OpenGL context
+  using @'FRP.Spice.Engine.startEngine'@ in the engine.
+-}
 data WindowConfig = WindowConfig { getWindowWidth      :: Int
                                  , getWindowHeight     :: Int
                                  , getWindowFullscreen :: Bool
@@ -16,7 +22,15 @@ data WindowConfig = WindowConfig { getWindowWidth      :: Int
                                  }
   deriving (Eq, Show, Read)
 
--- The default window config
+{-|
+  The default for @'WindowConfig'@
+
+  > getWindowWidth      = 640
+  > getWindowHeight     = 480
+  > getWindowFullscreen = False
+  > getWindowResizeable = False
+  > getWindowTitle      = "Spice Application"
+-}
 defaultWindowConfig :: WindowConfig
 defaultWindowConfig = WindowConfig { getWindowWidth      = 640
                                    , getWindowHeight     = 480
@@ -25,7 +39,5 @@ defaultWindowConfig = WindowConfig { getWindowWidth      = 640
                                    , getWindowTitle      = "Spice Application"
                                    }
 
--- A default instance for the window
--- config
 instance Default WindowConfig where
   def = defaultWindowConfig

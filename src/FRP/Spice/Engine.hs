@@ -1,3 +1,7 @@
+{-|
+  This module handles starting the engine. This is done via the use of the
+  @'startEngine'@ function.
+-}
 module FRP.Spice.Engine where
 
 --------------------
@@ -19,7 +23,12 @@ import FRP.Spice.Game
 ----------
 -- Code --
 
--- Starting the engine
+{-|
+  Starting the spice engine with the parameters prescribed in the
+  @'WindowConfig'@. It updates and renders the @'Game'@ automatically so all
+  you need to to is set up the @'WindowConfig'@ and make a datatype with an
+  instance of @'Game'@.
+-}
 startEngine :: Game a => WindowConfig -> a -> IO ()
 startEngine wc game = do
   -- Opening the window

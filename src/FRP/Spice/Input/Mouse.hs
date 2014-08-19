@@ -1,3 +1,6 @@
+{-|
+  The mouse (button) specific section of input.
+-}
 module FRP.Spice.Input.Mouse where
 
 --------------------

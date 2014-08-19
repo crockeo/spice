@@ -1,3 +1,6 @@
+{-|
+  This module need not be used directly. Refer to @'FRP.Spice.Engine'@ instead.
+-}
 module FRP.Spice.Engine.RunInput where
 
 --------------------
@@ -14,7 +17,11 @@ import FRP.Spice.Game
 ----------
 -- Code --
 
--- Running the input
+{-|
+  Given an @'IORef'@ indicating whether or not the program should close, it
+  either returns the delta time since the last call, or a @'Nothing'@,
+  indicating that the program should close.
+-}
 runInput :: IORef Bool -> IO (Maybe Float)
 runInput closed = do
   c <- readIORef closed

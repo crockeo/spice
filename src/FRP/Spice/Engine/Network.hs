@@ -1,3 +1,7 @@
+{-|
+  This module need not be used directly. Refer to
+  @'FRP.Spice.Engine.startEngine'@ instead.
+-}
 module FRP.Spice.Engine.Network where
 
 --------------------
@@ -13,7 +17,10 @@ import FRP.Spice.Game
 ----------
 -- Code --
 
--- Making the network
+{-|
+  Creating a network to be used with the
+  @'FRP.Spice.Engine.Driver.driveNetwork'@ function.
+-}
 makeNetwork :: Game a => Signal Input -> Signal a -> (a -> IO ()) -> IO (Float -> IO (IO ()))
 makeNetwork inputSignal gameSignal gameSink =
   start $ memo $ do
