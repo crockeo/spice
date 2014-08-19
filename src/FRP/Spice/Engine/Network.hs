@@ -11,6 +11,7 @@ import FRP.Elerea.Param
 
 -------------------
 -- Local Imports --
+import FRP.Spice.Engine.RenderWrapper
 import FRP.Spice.Input
 import FRP.Spice.Game
 
@@ -29,4 +30,4 @@ makeNetwork inputSignal gameSignal gameSink =
 
     return $ do
       gameSink $ update 0.01 input game
-      render game
+      renderWrapper $ render game

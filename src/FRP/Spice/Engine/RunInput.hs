@@ -24,6 +24,7 @@ import FRP.Spice.Game
 -}
 runInput :: IORef Bool -> IO (Maybe Float)
 runInput closed = do
+  pollEvents
   c <- readIORef closed
 
   if c
