@@ -24,7 +24,9 @@ import FRP.Spice.Math.Vector
 instance Ord MouseButton where
   mb1 <= mb2 = fromEnum mb1 < fromEnum mb2
 
--- A set of all mouse buttons available via GLFW
+{-|
+  A list of all mouse buttons available via the GLFW api.
+-}
 buttons :: [MouseButton]
 buttons = [ ButtonLeft
           , ButtonRight
@@ -33,14 +35,22 @@ buttons = [ ButtonLeft
           ++
           map ButtonNo [0 .. 7]
 
--- Getting externals for all of the buttons
+{-|
+  A map from @'MouseButton'@ to externals created for every button.
+-}
 externals :: IO (Map MouseButton (Signal Bool, Bool -> IO ()))
 externals = liftM fromList $ mapM (\b -> liftM ((,) b) $ external False) buttons
 
--- Getting the signals from the externals
+{-|
+  Creating the @'Signal'@ of a @'Map'@ from @'MouseButton'@ to @'Bool'@ from a
+  @'Map'@ of @'externals'@.
+-}
 signals :: Map MouseButton (Signal Bool, Bool -> IO ()) -> Signal (Map MouseButton Bool)
 signals = T.sequence . fmap fst
 
--- Getting the sinks from the externals
+{-|
+  Making a @'Map'@ from @'MouseButton'@ to sink from a @'Map'@ of
+  @'externals'@.
+-}
 sinks :: Map MouseButton (Signal Bool, Bool -> IO ()) -> Map MouseButton (Bool -> IO ())
 sinks = fmap snd

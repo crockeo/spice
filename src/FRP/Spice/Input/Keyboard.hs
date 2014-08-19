@@ -21,8 +21,7 @@ keys :: [Key]
 keys = map toEnum [0 .. 318]
 
 {-|
-  A Map from @'Key'@ to the externals created for every single
-  key.
+  A Map from @'Key'@ to the externals created for every single key.
 -}
 externals :: IO (Map Key (Signal Bool, Bool -> IO ()))
 externals = liftM fromList $ mapM (\k -> liftM ((,) k) $ external False) keys
