@@ -24,6 +24,7 @@ import qualified FRP.Spice.Input.MousePosition as MousePosition
 import qualified FRP.Spice.Input.Keyboard as Keyboard
 import qualified FRP.Spice.Input.Mouse as Mouse
 import FRP.Spice.Math.Vector
+import FRP.Spice.Config
 
 -----------------------
 -- Rexported Imports --
@@ -90,9 +91,11 @@ makeInputContainer = do
 {-|
   Creating a callback to update the mouse position's state.
 -}
-makeMousePositionCallback :: InputContainer -> MousePosCallback
-makeMousePositionCallback ic (Position x y) =
-  mousePositionSinks (getSinks ic) $ Vector (fromIntegral x / 320 - 1) ((-fromIntegral y) / 240 - 1)
+makeMousePositionCallback :: WindowConfig -> InputContainer -> MousePosCallback
+makeMousePositionCallback wc ic (Position x y) =
+  mousePositionSinks (getSinks ic) $
+    Vector (  fromIntegral x  / ((fromIntegral $ getWindowWidth  wc) / 2) - 1)
+           ((-fromIntegral y) / ((fromIntegral $ getWindowHeight wc) / 2) + 1)
 
 {-|
   Creating a callback to update the keyboard's states.

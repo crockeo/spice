@@ -75,7 +75,7 @@ startEngine wc game = do
       ic <- makeInputContainer
 
       -- Updating the input
-      mousePosCallback    $= makeMousePositionCallback ic
+      mousePosCallback    $= makeMousePositionCallback wc ic
       keyCallback         $= makeKeyboardCallback ic
       mouseButtonCallback $= makeMouseCallback ic
 
