@@ -29,6 +29,10 @@ data Color = Color { getRed   :: Float
                    }
   deriving (Eq, Show, Read)
 
+{-|
+  Changing the current OpenGL context's @'Color4'@ to whatever @'Color'@
+  specified.
+-}
 instance Renderable Color where
   toRender (Color r g b a) =
     Render $

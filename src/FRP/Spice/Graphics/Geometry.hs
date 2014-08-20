@@ -26,8 +26,16 @@ import FRP.Spice.Math.Vector
 ----------
 -- Code --
 
+{-|
+  The information necessary to construct any given OpenGL primitive. The
+  @'PrimitiveMode'@ represents -- of course -- the kind of GL primitive to
+  render. The list of @'Vector'@s directly represents the vertecies to bind.
+-}
 data Primitive = Primitive PrimitiveMode [Vector Float]
 
+{-|
+  Rendering whatever OpenGL primitive is specified.
+-}
 instance Renderable Primitive where
   toRender (Primitive mode vertecies) =
     Render $
