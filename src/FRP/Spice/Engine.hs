@@ -2,7 +2,7 @@
   This module handles starting the engine. This is done via the use of the
   @'startEngine'@ function.
 -}
-module FRP.Spice.Engine where
+module FRP.Spice.Engine (startEngine) where
 
 --------------------
 -- Global Imports --
@@ -23,6 +23,10 @@ import FRP.Spice.Game
 ----------
 -- Code --
 
+-- Containing if the engine has been made before
+madeRef :: IO (IORef Bool)
+madeRef = newIORef False
+
 {-|
   Starting the spice engine with the parameters prescribed in the
   @'WindowConfig'@. It updates and renders the @'Game'@ automatically so all
@@ -31,33 +35,40 @@ import FRP.Spice.Game
 -}
 startEngine :: Game a => WindowConfig -> a -> IO ()
 startEngine wc game = do
-  -- Opening the window
-  initialize
-  openWindow (Size 640 480) [DisplayRGBBits 8 8 8, DisplayAlphaBits 8, DisplayDepthBits 24] Window
+  made   <- madeRef
+  isMade <- readIORef made
+  if isMade
+    then error "You cannot run 'startEngine' more than once per program."
+    else do
+      writeIORef made True
 
-  -- Checking for the window being closed
-  closed <- newIORef False
-  windowCloseCallback $= do
-    writeIORef closed True
-    return True
+      -- Opening the window
+      initialize
+      openWindow (Size 640 480) [DisplayRGBBits 8 8 8, DisplayAlphaBits 8, DisplayDepthBits 24] Window
 
-  -- Getting an external of the game
-  (gameSignal, gameSink) <- external game
+      -- Checking for the window being closed
+      closed <- newIORef False
+      windowCloseCallback $= do
+        writeIORef closed True
+        return True
 
-  -- Getting the input container
-  ic <- makeInputContainer
+      -- Getting an external of the game
+      (gameSignal, gameSink) <- external game
 
-  -- Updating the input
-  mousePosCallback    $= makeMousePositionCallback ic
-  keyCallback         $= makeKeyboardCallback ic
-  mouseButtonCallback $= makeMouseCallback ic
+      -- Getting the input container
+      ic <- makeInputContainer
 
-  -- Creating the network
-  network <- makeNetwork (getInput ic) gameSignal gameSink
+      -- Updating the input
+      mousePosCallback    $= makeMousePositionCallback ic
+      keyCallback         $= makeKeyboardCallback ic
+      mouseButtonCallback $= makeMouseCallback ic
 
-  -- Driving the network
-  GLFW.time $= 0
-  driveNetwork network $ runInput closed
+      -- Creating the network
+      network <- makeNetwork (getInput ic) gameSignal gameSink
 
-  -- Closing the window, after all is said and done
-  closeWindow
+      -- Driving the network
+      GLFW.time $= 0
+      driveNetwork network $ runInput closed
+
+      -- Closing the window, after all is said and done
+      closeWindow
