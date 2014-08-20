@@ -2,15 +2,23 @@ module FRP.Spice.Graphics.Scene where
 
 --------------------
 -- Global Imports --
+import Graphics.Rendering.OpenGL
 import Control.Applicative
 import Control.Monad
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Element
+import FRP.Spice.Graphics.Utils
+import FRP.Spice.Math.Vector
 
 ----------
 -- Code --
+
+{-|
+  Purely specifying the rendering behavior of a single element. To be composed
+  into @'FRP.Spice.Graphics.Scene'@s for a full rendering effect.
+-}
+data Element = Element PrimitiveMode [Vector Float]
 
 {-|
   For composing a scene out of a set of elements.
@@ -44,6 +52,15 @@ instance Monad SceneT where
   (SceneT elements v) >>= fn =
     let (SceneT elements' v') = fn v in
       SceneT (elements ++ elements') v'
+
+{-|
+  Rendering a single @'Element'@.
+-}
+renderElement :: Element -> IO ()
+renderElement (Element pm vs) =
+  renderPrimitive pm $
+    forM_ vs $ \(Vector x y) ->
+      vertex $ Vertex2 (togl x) (togl y)
 
 {-|
   Rendering a whole @'Scene'@ (renders each @'Element'@ from first in list to last in

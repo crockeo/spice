@@ -28,6 +28,7 @@ library
                        FRP.Spice.Game
                        FRP.Spice.Graphics.Color
                        FRP.Spice.Graphics.Geometry
+                       FRP.Spice.Graphics.Scene
                        FRP.Spice.Graphics.Utils
                        FRP.Spice.Input
                        FRP.Spice.Input.Keyboard
