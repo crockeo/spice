@@ -63,6 +63,13 @@ renderElement (Element pm vs) =
       vertex $ Vertex2 (togl x) (togl y)
 
 {-|
+  Constructing a SceneT from a list of elements.
+-}
+fromElements :: [Element] -> Scene
+fromElements elements =
+  SceneT elements ()
+
+{-|
   Rendering a whole @'Scene'@ (renders each @'Element'@ from first in list to last in
   list.)
 -}

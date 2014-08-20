@@ -10,6 +10,7 @@ import Graphics.Rendering.OpenGL
 
 -------------------
 -- Local Imports --
+import FRP.Spice.Graphics.Scene
 import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math.Vector
 
@@ -19,24 +20,24 @@ import FRP.Spice.Math.Vector
 {-|
   Rendering a point.
 -}
-renderPoint :: Vector Float -> IO ()
-renderPoint (Vector x y) = do
-  renderPrimitive Points $
-    vertex $ Vertex2 (togl x) (togl y)
+renderPoint :: Vector Float -> Scene
+renderPoint pos =
+  fromElements [Element Points [pos]]
 
 {-|
   Rendering a rectangle.
 -}
-renderRectangle :: Vector Float -> Vector Float -> IO ()
+renderRectangle :: Vector Float -> Vector Float -> Scene
 renderRectangle (Vector x y) (Vector w h) = do
-  renderPrimitive Quads $ do
-    vertex $ Vertex2 (togl (x    )) (togl (y    ))
-    vertex $ Vertex2 (togl (x + w)) (togl (y    ))
-    vertex $ Vertex2 (togl (x + w)) (togl (y + h))
-    vertex $ Vertex2 (togl (x    )) (togl (y + h))
+  fromElements [ Element Quads [ Vector (x    ) (y    )
+                               , Vector (x + w) (y    )
+                               , Vector (x + w) (y + h)
+                               , Vector (x    ) (y + h)
+                               ]
+               ]
 
 {-|
   Rendering a square.
 -}
-renderSquare :: Vector Float -> Float -> IO ()
+renderSquare :: Vector Float -> Float -> Scene
 renderSquare pos size = renderRectangle pos $ Vector size size
