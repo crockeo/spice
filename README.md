@@ -11,6 +11,15 @@ videogames in Haskell.
 
 # Installation
 
-No final installation instructions will be given until the library gets going.
-So long as you can install Elerea, GLFW, and OpenGL, you should be able to use
-it and work on it.
+To install *spice* first you must make sure you can (or already have) *elerea*,
+*GLFW*, and *OpenGL* installed on your machine.
+
+Then to install it simply run:
+
+```bash
+# Updating the cabal repository
+cabal update
+
+# Installing spice
+cabal install spice
+```
