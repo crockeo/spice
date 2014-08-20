@@ -17,7 +17,6 @@ import Data.Default
 data WindowConfig = WindowConfig { getWindowWidth      :: Int
                                  , getWindowHeight     :: Int
                                  , getWindowFullscreen :: Bool
-                                 , getWindowResizable  :: Bool
                                  , getWindowTitle      :: String
                                  }
   deriving (Eq, Show, Read)
@@ -35,7 +34,6 @@ defaultWindowConfig :: WindowConfig
 defaultWindowConfig = WindowConfig { getWindowWidth      = 640
                                    , getWindowHeight     = 480
                                    , getWindowFullscreen = False
-                                   , getWindowResizable  = False
                                    , getWindowTitle      = "Spice Application"
                                    }
 

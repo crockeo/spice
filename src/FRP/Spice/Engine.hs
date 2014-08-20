@@ -57,6 +57,9 @@ startEngine wc game = do
     else do
       writeIORef made True
 
+      -- Making the window unable to resize
+      openWindowHint NoResize True
+
       -- Opening the window
       initialize
       openWindow (makeSize wc) makeDisplayBits (makeWindowMode wc)
