@@ -7,15 +7,9 @@ module FRP.Spice.Input.Mouse where
 -- Global Imports --
 import qualified Data.Traversable as T (sequence)
 import Data.Map.Strict hiding (keys, map)
-import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
 import FRP.Elerea.Param
 import Control.Monad
-import Data.Default
-
--------------------
--- Local Imports --
-import FRP.Spice.Math.Vector
 
 ----------
 -- Code --

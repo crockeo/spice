@@ -16,7 +16,6 @@ module FRP.Spice.Input ( module Rexport
 import Data.Map.Strict hiding (keys, map)
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
-import Control.Applicative
 import FRP.Elerea.Param
 
 -------------------

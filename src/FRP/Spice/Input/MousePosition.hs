@@ -5,8 +5,6 @@ module FRP.Spice.Input.MousePosition where
 
 --------------------
 -- Global Imports --
-import Graphics.Rendering.OpenGL
-import Graphics.UI.GLFW as GLFW
 import FRP.Elerea.Param
 import Data.Default
 

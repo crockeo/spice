@@ -6,7 +6,6 @@ module FRP.Spice.Engine.Network where
 
 --------------------
 -- Global Imports --
-import Control.Applicative
 import FRP.Elerea.Param
 
 -------------------

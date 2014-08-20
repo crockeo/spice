@@ -13,17 +13,19 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  ghc-options:         -Wall
+  ghc-options:         -Wall -fno-warn-unused-do-bind
 
   exposed-modules:     FRP.Spice
-                       FRP.Spice.Config
+                       FRP.Spice.Graphics
+                       FRP.Spice.Math
+
+  other-modules:       FRP.Spice.Config
                        FRP.Spice.Engine
                        FRP.Spice.Engine.Driver
                        FRP.Spice.Engine.Network
                        FRP.Spice.Engine.RenderWrapper
                        FRP.Spice.Engine.RunInput
                        FRP.Spice.Game
-                       FRP.Spice.Graphics
                        FRP.Spice.Graphics.Color
                        FRP.Spice.Graphics.Geometry
                        FRP.Spice.Graphics.Utils

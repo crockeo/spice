@@ -10,10 +10,6 @@ import Graphics.UI.GLFW as GLFW
 import Data.IORef
 import GHC.Float
 
--------------------
--- Local Imports --
-import FRP.Spice.Game
-
 ----------
 -- Code --
 

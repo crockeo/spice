@@ -27,6 +27,21 @@ import FRP.Spice.Game
 madeRef :: IO (IORef Bool)
 madeRef = newIORef False
 
+-- Making the size from a WindowConfig
+makeSize :: WindowConfig -> Size
+makeSize wc = Size (fromIntegral $ getWindowWidth wc) (fromIntegral $ getWindowHeight wc)
+
+-- Making the displaybits from a WindowConfig
+makeDisplayBits :: [DisplayBits]
+makeDisplayBits = [DisplayRGBBits 8 8 8, DisplayAlphaBits 8, DisplayDepthBits 24]
+
+-- Making the window mode from a WindowConfig
+makeWindowMode :: WindowConfig -> WindowMode
+makeWindowMode wc =
+  if getWindowFullscreen wc
+    then FullScreen
+    else Window
+
 {-|
   Starting the spice engine with the parameters prescribed in the
   @'WindowConfig'@. It updates and renders the @'Game'@ automatically so all
@@ -44,7 +59,8 @@ startEngine wc game = do
 
       -- Opening the window
       initialize
-      openWindow (Size 640 480) [DisplayRGBBits 8 8 8, DisplayAlphaBits 8, DisplayDepthBits 24] Window
+      openWindow (makeSize wc) makeDisplayBits (makeWindowMode wc)
+      windowTitle $= getWindowTitle wc
 
       -- Checking for the window being closed
       closed <- newIORef False

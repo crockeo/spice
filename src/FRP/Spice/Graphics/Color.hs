@@ -6,7 +6,7 @@ module FRP.Spice.Graphics.Color where
 
 --------------------
 -- Global Imports --
-import Graphics.Rendering.OpenGL (Color4 (..), GLfloat, color)
+import Graphics.Rendering.OpenGL (Color4 (..), color)
 
 -------------------
 -- Local Imports --
