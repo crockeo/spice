@@ -9,6 +9,10 @@ module FRP.Spice.Engine.RenderWrapper where
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW
 
+--------------------
+-- Global Imports --
+import FRP.Spice.Graphics.Scene
+
 ----------
 -- Code --
 
@@ -17,11 +21,11 @@ import Graphics.UI.GLFW
   provide a bit of a framework around it. It runs @'clear'@ before the render
   function, and @'flush'@ / @'swapBuffers'@ afterwards.
 -}
-renderWrapper :: IO () -> IO ()
-renderWrapper renderfn = do
+renderWrapper :: Scene -> IO ()
+renderWrapper scene = do
   clear [ColorBuffer]
 
-  renderfn
+  renderScene scene
 
   flush
   swapBuffers
