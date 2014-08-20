@@ -16,8 +16,8 @@ import Data.IORef
 import FRP.Spice.Engine.RunInput
 import FRP.Spice.Engine.Network
 import FRP.Spice.Engine.Driver
+import FRP.Spice.Input.Backend
 import FRP.Spice.Config
-import FRP.Spice.Input
 import FRP.Spice.Game
 
 ----------
