@@ -1,29 +1,24 @@
-module FRP.Spice.Graphics.Scene where
+module FRP.Spice.Graphics.Scene ( Scene
+                                , fromRenderables
+                                , renderScene
+                                ) where
 
 --------------------
 -- Global Imports --
-import Graphics.Rendering.OpenGL
 import Control.Applicative
 import Control.Monad
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Utils
-import FRP.Spice.Math.Vector
+import FRP.Spice.Graphics.Renderable
 
 ----------
 -- Code --
 
 {-|
-  Purely specifying the rendering behavior of a single element. To be composed
-  into @'FRP.Spice.Graphics.Scene'@s for a full rendering effect.
+  For composing a scene out of a set of renderables.
 -}
-data Element = Element PrimitiveMode [Vector Float]
-
-{-|
-  For composing a scene out of a set of elements.
--}
-data SceneT a = SceneT [Element] a
+data SceneT a = SceneT [Render] a
 
 {-|
   The commonly used instance of SceneT
@@ -34,7 +29,7 @@ type Scene = SceneT ()
   Functor instance to satisfy applicative instance.
 -}
 instance Functor SceneT where
-  fmap fn (SceneT elements v) = SceneT elements $ fn v
+  fmap fn (SceneT renderables v) = SceneT renderables $ fn v
 
 {-|
   Applicative instance to satisfy the monad instance. Not advised to use
@@ -49,30 +44,21 @@ instance Applicative SceneT where
 -}
 instance Monad SceneT where
   return a = SceneT [] a
-  (SceneT elements v) >>= fn =
-    let (SceneT elements' v') = fn v in
-      SceneT (elements ++ elements') v'
+  (SceneT renderables v) >>= fn =
+    let (SceneT renderables' v') = fn v in
+      SceneT (renderables ++ renderables') v'
 
 {-|
-  Rendering a single @'Element'@.
+  Constructing a SceneT from a list of renderables.
 -}
-renderElement :: Element -> IO ()
-renderElement (Element pm vs) =
-  renderPrimitive pm $
-    forM_ vs $ \(Vector x y) ->
-      vertex $ Vertex2 (togl x) (togl y)
-
-{-|
-  Constructing a SceneT from a list of elements.
--}
-fromElements :: [Element] -> Scene
-fromElements elements =
-  SceneT elements ()
+fromRenderables :: Renderable a => [a] -> Scene
+fromRenderables renderables =
+  SceneT (map toRender renderables) ()
 
 {-|
   Rendering a whole @'Scene'@ (renders each @'Element'@ from first in list to last in
   list.)
 -}
 renderScene :: Scene -> IO ()
-renderScene (SceneT elements _) =
-  forM_ elements renderElement
+renderScene (SceneT renderables _) =
+  forM_ renderables runRender
