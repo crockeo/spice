@@ -14,7 +14,8 @@ import Graphics.UI.GLFW
 
 {-|
   A function to be ran on a @'FRP.Spice.Game.Game'@'s render function to
-  provide a bit of a framework around it.
+  provide a bit of a framework around it. It runs @'clear'@ before the render
+  function, and @'flush'@ / @'swapBuffers'@ afterwards.
 -}
 renderWrapper :: IO () -> IO ()
 renderWrapper renderfn = do
