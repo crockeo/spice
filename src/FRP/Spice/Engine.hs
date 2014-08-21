@@ -24,10 +24,6 @@ import FRP.Spice.Math
 ----------
 -- Code --
 
--- Containing if the engine has been made before
-madeRef :: IO (IORef Bool)
-madeRef = newIORef False
-
 -- Making the size from a WindowConfig
 makeSize :: WindowConfig -> Size
 makeSize wc = Size (fromIntegral $ getWindowWidth wc) (fromIntegral $ getWindowHeight wc)
@@ -57,45 +53,38 @@ resizeCallback wSize size@(Size w h) = do
 -}
 startEngine :: Game a => WindowConfig -> a -> IO ()
 startEngine wc game = do
-  made   <- madeRef
-  isMade <- readIORef made
-  if isMade
-    then error "You cannot run 'startEngine' more than once per program."
-    else do
-      writeIORef made True
+  -- Opening the window
+  initialize
+  openWindow (makeSize wc) makeDisplayBits (makeWindowMode wc)
+  windowTitle $= getWindowTitle wc
 
-      -- Opening the window
-      initialize
-      openWindow (makeSize wc) makeDisplayBits (makeWindowMode wc)
-      windowTitle $= getWindowTitle wc
+  -- Checking for the window being closed
+  closed <- newIORef False
+  windowCloseCallback $= do
+    writeIORef closed True
+    return True
 
-      -- Checking for the window being closed
-      closed <- newIORef False
-      windowCloseCallback $= do
-        writeIORef closed True
-        return True
+  -- Function to run on window resize
+  wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
+  windowSizeCallback $= resizeCallback wSizeRef
 
-      -- Function to run on window resize
-      wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
-      windowSizeCallback $= resizeCallback wSizeRef
+  -- Getting an external of the game
+  (gameSignal, gameSink) <- external game
 
-      -- Getting an external of the game
-      (gameSignal, gameSink) <- external game
+  -- Getting the input container
+  ic <- makeInputContainer
 
-      -- Getting the input container
-      ic <- makeInputContainer
+  -- Updating the input
+  mousePosCallback    $= makeMousePositionCallback ic wSizeRef
+  keyCallback         $= makeKeyboardCallback ic
+  mouseButtonCallback $= makeMouseCallback ic
 
-      -- Updating the input
-      mousePosCallback    $= makeMousePositionCallback ic wSizeRef
-      keyCallback         $= makeKeyboardCallback ic
-      mouseButtonCallback $= makeMouseCallback ic
+  -- Creating the network
+  network <- makeNetwork (getInput ic) gameSignal gameSink
 
-      -- Creating the network
-      network <- makeNetwork (getInput ic) gameSignal gameSink
+  -- Driving the network
+  GLFW.time $= 0
+  driveNetwork network $ runInput closed
 
-      -- Driving the network
-      GLFW.time $= 0
-      driveNetwork network $ runInput closed
-
-      -- Closing the window, after all is said and done
-      closeWindow
+  -- Closing the window, after all is said and done
+  closeWindow
