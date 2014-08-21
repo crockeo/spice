@@ -10,7 +10,7 @@ import Graphics.Rendering.OpenGL (Color4 (..), color)
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Renderable
+import FRP.Spice.Graphics.Element
 import FRP.Spice.Graphics.Scene
 import FRP.Spice.Graphics.Utils
 
@@ -30,24 +30,21 @@ data Color = Color { getRed   :: Float
   deriving (Eq, Show, Read)
 
 {-|
-  Changing the current OpenGL context's @'Color4'@ to whatever @'Color'@
-  specified.
+  Converting a color to an action in a @'Scene'@.
 -}
-instance Renderable Color where
-  toRender (Color r g b a) =
-    Render $
-      color $ Color4 (togl r) (togl g) (togl b) (togl a)
+bindColor :: Color -> Scene
+bindColor (Color r g b a) = fromElements [SetColor r g b a]
 
 {-|
   A synonym for the @'Color'@ constructor.
 -}
-color4f :: Float -> Float -> Float -> Float -> Scene
-color4f r g b a = fromRenderables [Color r g b a]
+color4f :: Float -> Float -> Float -> Float -> Color
+color4f = Color
 
 {-|
   Constructing a @'Color'@ from 3 @'Float'@s, defaulting the alpha mask to 1.0.
 -}
-color3f :: Float -> Float -> Float -> Scene
+color3f :: Float -> Float -> Float -> Color
 color3f r g b = color4f r g b 1.0
 
 {-|
@@ -57,7 +54,7 @@ color3f r g b = color4f r g b 1.0
   also equivalent in source code) to calling color4f with each of its arguments
   divided by 255.)
 -}
-color4i :: Int -> Int -> Int -> Int -> Scene
+color4i :: Int -> Int -> Int -> Int -> Color
 color4i r g b a = color4f (fromIntegral r / 255)
                           (fromIntegral g / 255)
                           (fromIntegral b / 255)
@@ -66,35 +63,35 @@ color4i r g b a = color4f (fromIntegral r / 255)
 {-|
   Constructing a @'Color'@ from 3 @'Int'@s, defaulting the alpha mask to 255.
 -}
-color3i :: Int -> Int -> Int -> Scene
+color3i :: Int -> Int -> Int -> Color
 color3i r g b = color4i r g b 255
 
 {-|
   The color black.
 -}
-black :: Scene
+black :: Color
 black = color3i 0 0 0
 
 {-|
   The color white.
 -}
-white :: Scene
+white :: Color
 white = color3i 255 255 255
 
 {-|
   The color red.
 -}
-red :: Scene
+red :: Color
 red = color3i 255 0 0
 
 {-|
   The color green.
 -}
-green :: Scene
+green :: Color
 green = color3i 0 255 0
 
 {-|
   The color blue.
 -}
-blue :: Scene
+blue :: Color
 blue = color3i 0 0 255

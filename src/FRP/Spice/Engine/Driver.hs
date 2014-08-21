@@ -5,12 +5,7 @@ module FRP.Spice.Engine.Driver where
 
 --------------------
 -- Global Imports --
-import Control.Monad
-
---------------------
--- Global Imports --
 import FRP.Spice.Engine.RenderWrapper
-import FRP.Spice.Graphics.Scene
 import FRP.Spice.Game
 
 ----------

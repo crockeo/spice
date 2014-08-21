@@ -1,5 +1,5 @@
 module FRP.Spice.Graphics.Scene ( Scene
-                                , fromRenderables
+                                , fromElements
                                 , renderScene
                                 ) where
 
@@ -10,15 +10,15 @@ import Control.Monad
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Renderable
+import FRP.Spice.Graphics.Element
 
 ----------
 -- Code --
 
 {-|
-  For composing a scene out of a set of renderables.
+  For composing a scene out of a set of elements.
 -}
-data SceneT a = SceneT [Render] a
+data SceneT a = SceneT [Element] a
 
 {-|
   The commonly used instance of SceneT
@@ -29,7 +29,7 @@ type Scene = SceneT ()
   Functor instance to satisfy applicative instance.
 -}
 instance Functor SceneT where
-  fmap fn (SceneT renderables v) = SceneT renderables $ fn v
+  fmap fn (SceneT elements v) = SceneT elements $ fn v
 
 {-|
   Applicative instance to satisfy the monad instance. Not advised to use
@@ -44,21 +44,21 @@ instance Applicative SceneT where
 -}
 instance Monad SceneT where
   return a = SceneT [] a
-  (SceneT renderables v) >>= fn =
-    let (SceneT renderables' v') = fn v in
-      SceneT (renderables ++ renderables') v'
+  (SceneT elements v) >>= fn =
+    let (SceneT elements' v') = fn v in
+      SceneT (elements ++ elements') v'
 
 {-|
-  Constructing a SceneT from a list of renderables.
+  Constructing a SceneT from a list of elements.
 -}
-fromRenderables :: Renderable a => [a] -> Scene
-fromRenderables renderables =
-  SceneT (map toRender renderables) ()
+fromElements :: [Element] -> Scene
+fromElements elements =
+  SceneT elements ()
 
 {-|
   Rendering a whole @'Scene'@ (renders each @'Element'@ from first in list to last in
   list.)
 -}
 renderScene :: Scene -> IO ()
-renderScene (SceneT renderables _) =
-  forM_ renderables runRender
+renderScene (SceneT elements _) =
+  forM_ elements renderElement

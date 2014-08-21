@@ -1,8 +1,7 @@
 {-|
   This module re-exports a number of modules having to do with graphics.
 -}
-module FRP.Spice.Graphics ( module FRP.Spice.Graphics.Renderable
-                          , module FRP.Spice.Graphics.Geometry
+module FRP.Spice.Graphics ( module FRP.Spice.Graphics.Geometry
                           , module FRP.Spice.Graphics.Color
                           , module FRP.Spice.Graphics.Scene
                           , module FRP.Spice.Graphics.Utils
@@ -10,7 +9,6 @@ module FRP.Spice.Graphics ( module FRP.Spice.Graphics.Renderable
 
 -----------------------
 -- Rexported Imports --
-import FRP.Spice.Graphics.Renderable
 import FRP.Spice.Graphics.Geometry
 import FRP.Spice.Graphics.Color
 import FRP.Spice.Graphics.Scene

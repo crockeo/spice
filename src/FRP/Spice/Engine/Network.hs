@@ -10,7 +10,6 @@ import FRP.Elerea.Param
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Engine.RenderWrapper
 import FRP.Spice.Input
 import FRP.Spice.Game
 
