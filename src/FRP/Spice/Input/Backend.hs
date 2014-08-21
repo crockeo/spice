@@ -9,6 +9,7 @@ import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
 import FRP.Elerea.Param
 import Data.Map.Strict
+import Data.IORef
 
 -------------------
 -- Local Imports --
@@ -71,11 +72,12 @@ makeInputContainer = do
 {-|
   Creating a callback to update the mouse position's state.
 -}
-makeMousePositionCallback :: WindowConfig -> InputContainer -> MousePosCallback
-makeMousePositionCallback wc ic (Position x y) =
+makeMousePositionCallback :: InputContainer -> IORef (Vector Int) -> MousePosCallback
+makeMousePositionCallback ic wSizeRef (Position x y) = do
+  (Vector w h) <- readIORef wSizeRef
   mousePositionSinks (getSinks ic) $
-    Vector (  fromIntegral x  / ((fromIntegral $ getWindowWidth  wc) / 2) - 1)
-           ((-fromIntegral y) / ((fromIntegral $ getWindowHeight wc) / 2) + 1)
+    Vector (  fromIntegral x  / ((fromIntegral $ w) / 2) - 1)
+           ((-fromIntegral y) / ((fromIntegral $ h) / 2) + 1)
 
 {-|
   Creating a callback to update the keyboard's states.

@@ -19,6 +19,7 @@ import FRP.Spice.Engine.Driver
 import FRP.Spice.Input.Backend
 import FRP.Spice.Config
 import FRP.Spice.Game
+import FRP.Spice.Math
 
 ----------
 -- Code --
@@ -41,6 +42,12 @@ makeWindowMode wc =
   if getWindowFullscreen wc
     then FullScreen
     else Window
+
+-- Resizing the window
+resizeCallback :: IORef (Vector Int) -> WindowSizeCallback
+resizeCallback wSize size@(Size w h) = do
+  writeIORef wSize $ Vector (fromIntegral w) (fromIntegral h)
+  viewport $= (Position 0 0, size)
 
 {-|
   Starting the spice engine with the parameters prescribed in the
@@ -68,6 +75,10 @@ startEngine wc game = do
         writeIORef closed True
         return True
 
+      -- Function to run on window resize
+      wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
+      windowSizeCallback $= resizeCallback wSizeRef
+
       -- Getting an external of the game
       (gameSignal, gameSink) <- external game
 
@@ -75,7 +86,7 @@ startEngine wc game = do
       ic <- makeInputContainer
 
       -- Updating the input
-      mousePosCallback    $= makeMousePositionCallback wc ic
+      mousePosCallback    $= makeMousePositionCallback ic wSizeRef
       keyCallback         $= makeKeyboardCallback ic
       mouseButtonCallback $= makeMouseCallback ic
 
