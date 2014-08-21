@@ -26,11 +26,9 @@ data Element = RenderPrimitive PrimitiveMode [Vector Float]
   Converting an @'Element'@ into its matching OpenGL call.
 -}
 renderElement :: Element -> IO ()
-
 renderElement (RenderPrimitive mode vertecies) =
   renderPrimitive mode $
     forM_ vertecies $ \(Vector x y) ->
       vertex $ Vertex2 (togl x) (togl y)
-
 renderElement (SetColor r g b a) =
   color $ Color4 (togl r) (togl g) (togl b) (togl a)

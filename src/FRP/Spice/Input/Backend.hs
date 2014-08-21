@@ -16,7 +16,6 @@ import Data.IORef
 import qualified FRP.Spice.Input.MousePosition as MousePosition
 import qualified FRP.Spice.Input.Keyboard      as Keyboard
 import qualified FRP.Spice.Input.Mouse         as Mouse
-import FRP.Spice.Config
 import FRP.Spice.Input
 import FRP.Spice.Math
 

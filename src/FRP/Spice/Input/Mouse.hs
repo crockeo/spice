@@ -14,7 +14,9 @@ import Control.Monad
 ----------
 -- Code --
 
--- Adding an instance of Ord to MouseButton so it can be used with the map
+{-|
+  Adding an instance of Ord to MouseButton so it can be used with the map.
+-}
 instance Ord MouseButton where
   mb1 <= mb2 = fromEnum mb1 < fromEnum mb2
 

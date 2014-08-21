@@ -9,18 +9,12 @@ module FRP.Spice.Graphics.Geometry ( renderPoint
 
 --------------------
 -- Global Imports --
-import Graphics.Rendering.OpenGL ( PrimitiveMode (..)
-                                 , Vertex2 (..)
-                                 , renderPrimitive
-                                 , vertex
-                                 )
-import Control.Monad
+import Graphics.Rendering.OpenGL
 
 -------------------
 -- Local Imports --
 import FRP.Spice.Graphics.Element
 import FRP.Spice.Graphics.Scene
-import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math.Vector
 
 ----------

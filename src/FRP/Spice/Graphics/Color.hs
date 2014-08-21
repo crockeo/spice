@@ -4,15 +4,10 @@
 -}
 module FRP.Spice.Graphics.Color where
 
---------------------
--- Global Imports --
-import Graphics.Rendering.OpenGL (Color4 (..), color)
-
 -------------------
 -- Local Imports --
 import FRP.Spice.Graphics.Element
 import FRP.Spice.Graphics.Scene
-import FRP.Spice.Graphics.Utils
 
 ----------
 -- Code --

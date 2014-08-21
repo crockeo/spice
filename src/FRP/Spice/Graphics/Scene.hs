@@ -1,7 +1,4 @@
-module FRP.Spice.Graphics.Scene ( Scene
-                                , fromElements
-                                , renderScene
-                                ) where
+module FRP.Spice.Graphics.Scene where
 
 --------------------
 -- Global Imports --

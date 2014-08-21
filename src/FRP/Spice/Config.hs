@@ -27,7 +27,6 @@ data WindowConfig = WindowConfig { getWindowWidth      :: Int
   > getWindowWidth      = 640
   > getWindowHeight     = 480
   > getWindowFullscreen = False
-  > getWindowResizeable = False
   > getWindowTitle      = "Spice Application"
 -}
 defaultWindowConfig :: WindowConfig
@@ -37,5 +36,9 @@ defaultWindowConfig = WindowConfig { getWindowWidth      = 640
                                    , getWindowTitle      = "Spice Application"
                                    }
 
+{-|
+  A default instance for @'WindowConfig'@. Equivalent to calling
+  @'defaultWindowConfig'@.
+-}
 instance Default WindowConfig where
   def = defaultWindowConfig
