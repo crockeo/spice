@@ -28,4 +28,4 @@ runInput closed = do
     else do
       dt <- get GLFW.time
       GLFW.time $= 0
-      return $ Just $ double2Float (dt / 1000)
+      return $ Just $ double2Float dt
