@@ -8,7 +8,6 @@ module FRP.Spice.Engine (startEngine) where
 -- Global Imports --
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
-import FRP.Elerea.Param
 import Data.IORef
 
 -------------------
@@ -68,9 +67,6 @@ startEngine wc game = do
   wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
   windowSizeCallback $= resizeCallback wSizeRef
 
-  -- Getting an external of the game
-  (gameSignal, gameSink) <- external game
-
   -- Getting the input container
   ic <- makeInputContainer
 
@@ -80,7 +76,7 @@ startEngine wc game = do
   mouseButtonCallback $= makeMouseCallback ic
 
   -- Creating the network
-  network <- makeNetwork (getInput ic) gameSignal gameSink
+  network <- makeNetwork (getInput ic) game
 
   -- Driving the network
   GLFW.time $= 0

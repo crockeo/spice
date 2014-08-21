@@ -18,17 +18,15 @@ import FRP.Spice.Game
 -- Code --
 
 {-|
-  The actual update function to be used.
+  The raw update function that @'makeNetwork'@ calls.
 -}
-updateFn :: Game a => (a -> IO ()) -> Float -> Input -> a -> IO () -> IO ()
-updateFn gameSink dt input game _ = do
-  gameSink $ update dt input game
-  renderWrapper $ render game
+updateFn :: Game a => Float -> Input -> a -> a
+updateFn = update
 
 {-|
   Creating a network to be used with the
   @'FRP.Spice.Engine.Driver.driveNetwork'@ function.
 -}
-makeNetwork :: Game a => Signal Input -> Signal a -> (a -> IO ()) -> IO (Float -> IO (IO ()))
-makeNetwork inputSignal gameSignal gameSink =
-  start $ transfer2 (return ()) (updateFn gameSink) inputSignal gameSignal
+makeNetwork :: Game a => Signal Input -> a -> IO (Float -> IO a)
+makeNetwork inputSignal game =
+  start $ transfer game updateFn inputSignal
