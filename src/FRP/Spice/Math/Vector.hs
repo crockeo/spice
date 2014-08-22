@@ -56,3 +56,9 @@ instance Functor Vector where
 instance Applicative Vector where
   pure a = Vector a a
   (Vector fn _) <*> (Vector x y) = Vector (fn x) (fn y)
+
+{-|
+  Multiplying @'Vector'@ by a scalar value.
+-}
+scalar :: Num a => Vector a -> a -> Vector a
+scalar (Vector x y) n = Vector (x * n) (y * n)
