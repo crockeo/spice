@@ -5,6 +5,7 @@ module FRP.Spice.Math.Vector where
 
 --------------------
 -- Global Imports --
+import Control.Applicative
 import Data.Default
 import Data.Monoid
 
@@ -44,7 +45,14 @@ instance Num a => Num (Vector a) where
   negate (Vector x y) = Vector (negate x) (negate y)
 
 {-|
-  Maps over both values in the @'Vector'@
+  Maps over both values in the @'Vector'@.
 -}
 instance Functor Vector where
   fmap fn (Vector x y) = Vector (fn x) (fn y)
+
+{-|
+  Applicative instance for @'Vector'@.
+-}
+instance Applicative Vector where
+  pure a = Vector a a
+  (Vector fn _) <*> (Vector x y) = Vector (fn x) (fn y)
