@@ -28,6 +28,16 @@ renderPoint pos =
   fromElements [RenderPrimitive Points [pos]]
 
 {-|
+  Rendering a line between two points.
+-}
+renderLine :: Vector Float -> Vector Float -> Scene
+renderLine p1 p2 =
+  fromElements [ RenderPrimitive Lines [ p1
+                                       , p2
+                                       ]
+               ]
+
+{-|
   Rendering a rectangle.
 -}
 renderRectangle :: Vector Float -> Vector Float -> Scene
@@ -44,3 +54,21 @@ renderRectangle (Vector x y) (Vector w h) = do
 -}
 renderSquare :: Vector Float -> Float -> Scene
 renderSquare pos size = renderRectangle pos $ Vector size size
+
+{-|
+  Rendering a triangle.
+-}
+renderTriangle :: Vector Float -> Vector Float -> Vector Float -> Scene
+renderTriangle p1 p2 p3 =
+  fromElements [ RenderPrimitive Triangles [ p1
+                                           , p2
+                                           , p3
+                                           ]
+               ]
+
+{-|
+  Rendering a polygon with 1-N vertecies.
+-}
+renderPolygon :: [Vector Float] -> Scene
+renderPolygon l =
+  fromElements [RenderPrimitive Polygon l]
