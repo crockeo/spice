@@ -1,3 +1,6 @@
+{-|
+  This module provides an API to compose @'Scene'@s through do-notation.
+-}
 module FRP.Spice.Graphics.Scene where
 
 --------------------

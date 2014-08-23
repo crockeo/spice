@@ -1,3 +1,8 @@
+{-|
+  This module provides a unified API for specifying every kind of rendering
+  datatype and how they get rendered. All of this -- of course -- is only in
+  the scope the spice project.
+-}
 module FRP.Spice.Graphics.Element ( Element (..)
                                   , renderElement
                                   ) where
