@@ -17,5 +17,5 @@ import FRP.Spice.Math
   Rendering a given @'Sprite'@ at a given position specified by a @'Vector'@
   @'Float'@.
 -}
-renderSprite :: Sprite -> Vector Float -> Scene
-renderSprite sprite pos = undefined
+renderSprite :: Sprite -> Vector Float -> Vector Float -> Scene
+renderSprite sprite pos size = fromElements [RenderSprite sprite pos size]
