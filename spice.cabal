@@ -1,5 +1,5 @@
 name:                spice
-version:             0.3.3.1
+version:             0.3.3.2
 synopsis:            An FRP-based game engine written in Haskell.
 description:         An FRP-based game engine written in Haskell. - See the homepage for more information.
 homepage:            http://github.com/crockeo/spice
@@ -37,6 +37,7 @@ library
                        FRP.Spice.Input.Mouse
                        FRP.Spice.Input.MousePosition
                        FRP.Spice.Math.Vector
+                       FRP.Spice.Utils.DoList
 
   hs-source-dirs:      src/
 
