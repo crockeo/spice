@@ -16,9 +16,16 @@ import FRP.Spice.Utils.DoList
 -}
 type Scene = DoList [Element]
 
+{-|
+  Converting a list of @'Element'@s into a @'Scene'@ so that it may be composed
+  through do-notation.
+-}
 fromElements :: [Element] -> Scene
 fromElements = fromValues
 
+{-|
+  Rendering a Scene (effectively the same as running @'renderelement'@ on a
+  list of @'Element'@s.)
+-}
 renderScene :: Scene -> IO ()
-renderScene scene =
-  mapM_ renderElement $ values scene
+renderScene = mapM_ renderElement . values
