@@ -6,6 +6,7 @@ module FRP.Spice.Graphics.RenderSprite where
 
 -------------------
 -- Local Imports --
+import FRP.Spice.Graphics.Element
 import FRP.Spice.Graphics.Sprite
 import FRP.Spice.Graphics.Scene
 import FRP.Spice.Math
