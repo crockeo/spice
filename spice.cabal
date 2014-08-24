@@ -19,7 +19,8 @@ library
                        FRP.Spice.Graphics
                        FRP.Spice.Math
 
-  other-modules:       FRP.Spice.Config
+  other-modules:       FRP.Spice.Assets
+                       FRP.Spice.Config
                        FRP.Spice.Engine
                        FRP.Spice.Engine.Driver
                        FRP.Spice.Engine.Network
@@ -30,6 +31,7 @@ library
                        FRP.Spice.Graphics.Element
                        FRP.Spice.Graphics.Geometry
                        FRP.Spice.Graphics.Scene
+                       FRP.Spice.Graphics.Sprite
                        FRP.Spice.Graphics.Utils
                        FRP.Spice.Input
                        FRP.Spice.Input.Backend
