@@ -25,17 +25,23 @@ import FRP.Spice.Math
   has been implemented so far.)
 -}
 data Element = RenderPrimitive PrimitiveMode [Vector Float]
-             | RenderSprite (Vector Float) (Vector Float) Float
+             | RenderSprite Sprite (Vector Float) (Vector Float)
              | SetColor Float Float Float Float
 
 {-|
   Converting an @'Element'@ into its matching OpenGL call.
 -}
 renderElement :: Element -> IO ()
+
+-- Rendering a primitive
 renderElement (RenderPrimitive mode vertecies) =
   renderPrimitive mode $
     forM_ vertecies $ \(Vector x y) ->
       vertex $ Vertex2 (togl x) (togl y)
-renderElement (RenderSprite pos size rot) = return ()
+
+-- Rendering a sprite
+renderElement (RenderSprite Sprite pos size) = return ()
+
+-- Setting a color
 renderElement (SetColor r g b a) =
   color $ Color4 (togl r) (togl g) (togl b) (togl a)
