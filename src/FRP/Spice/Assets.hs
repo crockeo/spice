@@ -6,9 +6,7 @@ module FRP.Spice.Assets where
 
 --------------------
 -- Global Imports --
-import Data.ByteString.Lazy (ByteString)
 import qualified Data.Map.Strict as Map
-import Codec.Picture
 import Control.Monad
 
 -------------------
@@ -27,8 +25,7 @@ data LoadAsset = LoadImage FilePath
 {-|
   The asset type itself.
 -}
-data Asset = ImageAsset ByteString
-  deriving (Show)
+data Asset = Image
 
 {-|
   A type alias for a DoList.
@@ -45,24 +42,17 @@ loadImage = fromValues . return . LoadImage
   Loading a single asset via a @'LoadAsset'@ call.
 -}
 loadAsset :: LoadAsset -> IO (FilePath, Asset)
-loadAsset (LoadImage fp) = loadImageRaw fp
-
-{-|
-  Loading a raw image.
--}
-loadImageRaw :: FilePath -> IO (FilePath, Asset)
-loadImageRaw fp = do
-  eImg <- readPng fp
-
-  return $ case eImg of
-    Left  err -> error err
-    Right img ->
-      case encodeDynamicPng img of
-        Left  err -> error err
-        Right bs  -> (fp, ImageAsset bs)
+loadAsset (LoadImage fp) = return (fp, Image)
 
 {-|
   Constructing a Map of FilePath->Asset from a @'LoadAssets'@.
 -}
 loadAssets :: LoadAssets -> IO (Map.Map FilePath Asset)
-loadAssets la = liftM (Map.fromList) $ sequence $ map loadAsset $ values la
+loadAssets la =
+  liftM (Map.fromList) $ sequence $ map loadAsset $ values la
+
+{-|
+  Converting from a map of @'Asset'@s to a map of @'Sprite'@s.
+-}
+toSprites :: Map.Map FilePath Asset -> Map.Map FilePath Sprite
+toSprites = undefined
