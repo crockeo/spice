@@ -3,11 +3,8 @@
   current OpenGL context.
 -}
 module FRP.Spice.Graphics.Geometry ( renderPoint
-                                   , renderLine
                                    , renderRectangle
                                    , renderSquare
-                                   , renderTriangle
-                                   , renderPolygon
                                    ) where
 
 --------------------
