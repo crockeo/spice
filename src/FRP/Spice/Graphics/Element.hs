@@ -14,7 +14,6 @@ import Control.Monad
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Sprite
 import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math
 
