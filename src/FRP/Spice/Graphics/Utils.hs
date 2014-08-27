@@ -16,3 +16,9 @@ import Graphics.Rendering.OpenGL
 -}
 togl :: Float -> GLfloat
 togl = realToFrac
+
+{-|
+  Converting a @'GLfloat'@ to a @'Float'@.
+-}
+fromgl :: GLfloat -> Float
+fromgl = realToFrac
