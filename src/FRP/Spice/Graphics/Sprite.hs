@@ -1,5 +1,6 @@
 module FRP.Spice.Graphics.Sprite ( Sprite (..)
                                  , setActiveSprite
+                                 , renderSprite
                                  , loadSprite
                                  ) where
 
@@ -13,11 +14,11 @@ import Foreign.Storable
 import System.IO.Unsafe
 import Graphics.GLUtil
 import Control.Monad
-import Foreign.Ptr
 import Data.IORef
 
 -------------------
 -- Local Imports --
+import FRP.Spice.Graphics.Scene
 import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math
 
@@ -60,7 +61,7 @@ loadTex fp = do
 
   tu <- nextTextureUnit
 
-  return (t, tu, Size 0.5 0.5)
+  return (t, tu, Size 50 50)
 
 {-|
   A datatype to represent a @'TextureObject'@ through a reference to the
@@ -81,7 +82,7 @@ setActiveSprite sprite =
 {-|
   Performing an OpenGL call to render the @'Sprite'@.
 -}
-renderSprite :: Sprite -> Vector Float -> IO ()
+renderSprite :: Sprite -> Vector Float -> Scene
 renderSprite sprite pos = do
   setActiveSprite sprite
   renderPrimitive Quads $
@@ -104,7 +105,7 @@ makeSprite (to, tu, (Size w h)) =
          , spriteTexId = tu
          , spriteSize  = size
          }
-  where size = Vector (fromIntegral w) (fromIntegral h)
+  where size = Vector ((fromIntegral w) / 640) ((fromIntegral h) / 480)
 
 {-|
   Loading a @'Sprite'@ from a file.
