@@ -3,22 +3,11 @@
 -}
 module FRP.Spice.Graphics.Scene where
 
--------------------
--- Local Imports --
-import FRP.Spice.Graphics.Element
-import FRP.Spice.Utils.DoList
-
 ----------
 -- Code --
 
 {-|
-  A DoList to compose a list of @'Element'@s to render using do-notation.
+  A type synonym for a single IO () call to suggest that users should be
+  *rendering* in render calls, and not performing other IO.
 -}
-type Scene = DoList [Element]
-
-fromElements :: [Element] -> Scene
-fromElements = fromValues
-
-renderScene :: Scene -> IO ()
-renderScene scene =
-  mapM_ renderElement $ values scene
+type Scene = IO ()

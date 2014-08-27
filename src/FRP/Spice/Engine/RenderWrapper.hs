@@ -25,7 +25,7 @@ renderWrapper :: Scene -> IO ()
 renderWrapper scene = do
   clear [ColorBuffer]
 
-  renderScene scene
+  scene
 
   flush
   swapBuffers

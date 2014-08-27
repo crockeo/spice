@@ -2,12 +2,18 @@
   This module provides an abstraction over the default representations of color
   in the Haskell OpenGL bindings.
 -}
-module FRP.Spice.Graphics.Color where
+module FRP.Spice.Graphics.Color  where
+
+--------------------
+-- Global Imports --
+import Graphics.Rendering.OpenGL ( Color4 (..)
+                                 , color
+                                 )
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Element
 import FRP.Spice.Graphics.Scene
+import FRP.Spice.Graphics.Utils
 
 ----------
 -- Code --
@@ -28,7 +34,8 @@ data Color = Color { getRed   :: Float
   Converting a color to an action in a @'Scene'@.
 -}
 bindColor :: Color -> Scene
-bindColor (Color r g b a) = fromElements [SetColor r g b a]
+bindColor (Color r g b a) =
+  color $ Color4 (togl r) (togl g) (togl b) (togl a)
 
 {-|
   A synonym for the @'Color'@ constructor.
