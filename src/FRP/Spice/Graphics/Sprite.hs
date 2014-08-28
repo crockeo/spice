@@ -1,3 +1,7 @@
+{-|
+  This module provides an API for loading and rendering textures in the form
+  of @'Sprite'@s.
+-}
 module FRP.Spice.Graphics.Sprite ( Sprite (..)
                                  , renderSprite
                                  , loadSprite
@@ -15,6 +19,7 @@ import Foreign.Ptr
 
 -------------------
 -- Local Imports --
+import FRP.Spice.Graphics.Color
 import FRP.Spice.Graphics.Scene
 import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math
@@ -31,7 +36,10 @@ getInfo (ImageRGB16  (Image w h _)) = (w, h, RGB16)
 getInfo (ImageRGBA8  (Image w h _)) = (w, h, RGBA8)
 getInfo (ImageRGBA16 (Image w h _)) = (w, h, RGBA16)
 
--- Loading a texture
+{-|
+  Loading a @'TextureObject'@ and @'Size'@ from any RGB8, RGB16, RGBA8, or
+  RGBA16 images.
+-}
 loadTex :: FilePath -> IO (TextureObject, Size)
 loadTex path = do
   img <- either error id <$> readImageRGBA path
@@ -71,6 +79,7 @@ renderSprite sprite pos = do
   texture        Texture2D $= Enabled
   textureBinding Texture2D $= (Just $ spriteTex sprite)
 
+  bindColor $ color4i 0 0 0 0
   renderPrimitive Quads $
     forM_ (generateCoords pos $ spriteSize sprite) $ \(Vector x y, Vector tx ty) -> do
       texCoord $ TexCoord2 (togl tx) (togl ty)
