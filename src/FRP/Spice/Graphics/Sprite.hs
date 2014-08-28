@@ -1,20 +1,14 @@
 module FRP.Spice.Graphics.Sprite ( Sprite (..)
-                                 , setActiveSprite
                                  , renderSprite
                                  , loadSprite
                                  ) where
 
 --------------------
 -- Global Imports --
-import Graphics.Rendering.OpenGL.Raw.Core31
 import Graphics.Rendering.OpenGL
-import Foreign.Marshal.Alloc
 import Control.Applicative
-import Foreign.Storable
-import System.IO.Unsafe
 import Graphics.GLUtil
 import Control.Monad
-import Data.IORef
 
 -------------------
 -- Local Imports --
@@ -26,68 +20,39 @@ import FRP.Spice.Math
 -- Code --
 
 {-|
-  Getting a float from OpenGL
--}
-getFloat :: GLenum -> IO Float
-getFloat e = alloca $ \p -> do
-  glGetFloatv e p
-  liftM (fromgl) $ peek p
-
-{-|
-  A ref to count up from 0 -- used for counting up @'TextureUnit'@s.
--}
-counterRef :: IORef Int
-counterRef = unsafePerformIO $ newIORef 0
-
-{-|
-  Getting the next @'TextureUnit'@. Automatically ticks the @'counterRef'@ to
-  go up one.
--}
-nextTextureUnit :: IO TextureUnit
-nextTextureUnit = do
-  n <- readIORef counterRef
-  writeIORef counterRef $ n + 1
-  return $ TextureUnit $ fromIntegral n
-
-{-|
   Loading a @'TextureObject'@ from the filesystem.
 -}
-loadTex :: FilePath -> IO (TextureObject, TextureUnit, Size)
+loadTex :: FilePath -> IO (TextureObject, Size)
 loadTex fp = do
   t <- either error id <$> readTexture fp
 
-  textureFilter Texture2D   $= ((Nearest, Nothing), Nearest)
-  texture2DWrap             $= (Mirrored, ClampToEdge)
+  textureWrapMode Texture2D S $= (Repeated, ClampToBorder)
+  textureWrapMode Texture2D T $= (Repeated, ClampToBorder)
+  textureFilter   Texture2D   $= ((Linear', Just Linear'), Linear')
+  textureBinding  Texture2D   $= Just t
 
-  tu <- nextTextureUnit
-
-  return (t, tu, Size 50 50)
+  return (t, Size 50 50)
 
 {-|
   A datatype to represent a @'TextureObject'@ through a reference to the
   @'TextureObject'@ itself and its @'Size'@.
 -}
 data Sprite = Sprite { spriteTex   :: TextureObject
-                     , spriteTexId :: TextureUnit
                      , spriteSize  :: Vector Float
                      }
-
-{-|
-  Setting the @'Sprite'@ to be active.
--}
-setActiveSprite :: Sprite -> IO ()
-setActiveSprite sprite =
-  activeTexture $= spriteTexId sprite
 
 {-|
   Performing an OpenGL call to render the @'Sprite'@.
 -}
 renderSprite :: Sprite -> Vector Float -> Scene
 renderSprite sprite pos = do
-  setActiveSprite sprite
+  texture Texture2D $= Enabled
+
   renderPrimitive Quads $
     forM_ (generateCoords pos $ spriteSize sprite) $ \(Vector x y) ->
       vertex $ Vertex2 (togl x) (togl y)
+
+  texture Texture2D $= Disabled
   where generateCoords :: Vector Float -> Vector Float -> [Vector Float]
         generateCoords (Vector x y) (Vector w h) =
           [ Vector (x    ) (y    )
@@ -99,10 +64,9 @@ renderSprite sprite pos = do
 {-|
   Creating a @'Sprite'@ from a @'TextureObject'@.
 -}
-makeSprite :: (TextureObject, TextureUnit, Size) -> Sprite
-makeSprite (to, tu, (Size w h)) =
+makeSprite :: (TextureObject, Size) -> Sprite
+makeSprite (to, (Size w h)) =
   Sprite { spriteTex   = to
-         , spriteTexId = tu
          , spriteSize  = size
          }
   where size = Vector ((fromIntegral w) / 640) ((fromIntegral h) / 480)

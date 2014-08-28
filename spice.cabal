@@ -27,7 +27,6 @@ library
                        FRP.Spice.Engine.RunInput
                        FRP.Spice.Game
                        FRP.Spice.Graphics.Color
-                       FRP.Spice.Graphics.Element
                        FRP.Spice.Graphics.Geometry
                        FRP.Spice.Graphics.Scene
                        FRP.Spice.Graphics.Sprite
@@ -48,7 +47,6 @@ library
                ,       containers   == 0.5.*
                ,       data-default == 0.5.*
                ,       GLUtil       == 0.8.*
-               ,       OpenGLRaw
                ,       OpenGL
 
   default-language:    Haskell2010
