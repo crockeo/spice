@@ -6,9 +6,12 @@ module FRP.Spice.Graphics.Sprite ( Sprite (..)
 --------------------
 -- Global Imports --
 import Graphics.Rendering.OpenGL
+import Data.ByteString.Unsafe
 import Control.Applicative
-import Graphics.GLUtil
+import Codec.Picture.Repa
+import Codec.Picture
 import Control.Monad
+import Foreign.Ptr
 
 -------------------
 -- Local Imports --
@@ -20,18 +23,33 @@ import FRP.Spice.Math
 -- Code --
 
 {-|
-  Loading a @'TextureObject'@ from the filesystem.
+  Getting the size from a @'DynamicImage'@.
 -}
+getInfo :: DynamicImage -> (Int, Int, PixelInternalFormat)
+getInfo (ImageRGB8   (Image w h _)) = (w, h, RGB8)
+getInfo (ImageRGB16  (Image w h _)) = (w, h, RGB16)
+getInfo (ImageRGBA8  (Image w h _)) = (w, h, RGBA8)
+getInfo (ImageRGBA16 (Image w h _)) = (w, h, RGBA16)
+
+-- Loading a texture
 loadTex :: FilePath -> IO (TextureObject, Size)
-loadTex fp = do
-  t <- either error id <$> readTexture fp
+loadTex path = do
+  img <- either error id <$> readImageRGBA path
 
-  textureWrapMode Texture2D S $= (Repeated, ClampToBorder)
-  textureWrapMode Texture2D T $= (Repeated, ClampToBorder)
-  textureFilter   Texture2D   $= ((Linear', Just Linear'), Linear')
-  textureBinding  Texture2D   $= Just t
+  let dynimg         = imgToImage img
+      (w, h, format) = getInfo dynimg
+      glSize         = TextureSize2D (fromIntegral w) (fromIntegral h)
+      bs             = toByteString img
 
-  return (t, Size 50 50)
+  ptr <- unsafeUseAsCString bs $ \cstr ->
+    return $ castPtr cstr
+
+  [t] <- genObjectNames 1
+
+  textureBinding Texture2D $= Just t
+  texImage2D Texture2D NoProxy 0 format glSize 0 (PixelData BGRA UnsignedByte ptr)
+
+  return (t, Size (fromIntegral w) (fromIntegral h))
 
 {-|
   A datatype to represent a @'TextureObject'@ through a reference to the
@@ -46,19 +64,25 @@ data Sprite = Sprite { spriteTex   :: TextureObject
 -}
 renderSprite :: Sprite -> Vector Float -> Scene
 renderSprite sprite pos = do
-  texture Texture2D $= Enabled
+  textureWrapMode Texture2D S $= (Repeated, ClampToEdge)
+  textureWrapMode Texture2D T $= (Repeated, ClampToEdge)
+  textureFilter   Texture2D   $= ((Linear', Nothing), Linear')
+
+  texture        Texture2D $= Enabled
+  textureBinding Texture2D $= (Just $ spriteTex sprite)
 
   renderPrimitive Quads $
-    forM_ (generateCoords pos $ spriteSize sprite) $ \(Vector x y) ->
+    forM_ (generateCoords pos $ spriteSize sprite) $ \(Vector x y, Vector tx ty) -> do
+      texCoord $ TexCoord2 (togl tx) (togl ty)
       vertex $ Vertex2 (togl x) (togl y)
 
-  texture Texture2D $= Disabled
-  where generateCoords :: Vector Float -> Vector Float -> [Vector Float]
+  texture Texture2D        $= Disabled
+  where generateCoords :: Vector Float -> Vector Float -> [(Vector Float, Vector Float)]
         generateCoords (Vector x y) (Vector w h) =
-          [ Vector (x    ) (y    )
-          , Vector (x + w) (y    )
-          , Vector (x + w) (y + h)
-          , Vector (x    ) (y + h)
+          [ (Vector (x    ) (y    ), Vector 0 0)
+          , (Vector (x + w) (y    ), Vector 1 0)
+          , (Vector (x + w) (y + h), Vector 1 1)
+          , (Vector (x    ) (y + h), Vector 0 1)
           ]
 
 {-|
