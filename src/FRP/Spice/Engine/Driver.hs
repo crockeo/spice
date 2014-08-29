@@ -6,6 +6,7 @@ module FRP.Spice.Engine.Driver where
 --------------------
 -- Global Imports --
 import FRP.Spice.Engine.RenderWrapper
+import FRP.Spice.Assets
 import FRP.Spice.Game
 
 ----------
@@ -15,12 +16,12 @@ import FRP.Spice.Game
   Driving a network created with the @'FRP.Spice.Engine.Network.makeNetwork'@
   function and a function such as @'FRP.Spice.Engine.RunInput.runInput'@.
 -}
-driveNetwork :: Game a => (Float -> IO a) -> IO (Maybe Float) -> IO ()
-driveNetwork network iomdriver = do
+driveNetwork :: Game a => Assets -> (Float -> IO a) -> IO (Maybe Float) -> IO ()
+driveNetwork assets network iomdriver = do
   mdriver <- iomdriver
 
   case mdriver of
     Just driver -> do state <- network driver
-                      renderWrapper $ render state
-                      driveNetwork network iomdriver
+                      renderWrapper $ render assets state
+                      driveNetwork assets network iomdriver
     Nothing     -> return ()

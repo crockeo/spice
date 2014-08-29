@@ -7,6 +7,7 @@ module FRP.Spice.Game where
 -------------------
 -- Local Imports --
 import FRP.Spice.Graphics.Scene
+import FRP.Spice.Assets
 import FRP.Spice.Input
 
 ----------
@@ -24,4 +25,5 @@ type DeltaTime = Float
 -}
 class Game a where
   update :: DeltaTime -> Input -> a -> a
-  render :: a -> Scene
+  render :: Assets -> a -> Scene
+  loadAssets :: a -> LoadAssets

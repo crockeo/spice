@@ -16,6 +16,7 @@ import FRP.Spice.Engine.RunInput
 import FRP.Spice.Engine.Network
 import FRP.Spice.Engine.Driver
 import FRP.Spice.Input.Backend
+import FRP.Spice.Assets
 import FRP.Spice.Config
 import FRP.Spice.Game
 import FRP.Spice.Math
@@ -67,6 +68,9 @@ startEngine wc game = do
   wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
   windowSizeCallback $= resizeCallback wSizeRef
 
+  -- Loading the assets
+  assets <- performAssetLoads $ loadAssets game
+
   -- Getting the input container
   ic <- makeInputContainer
 
@@ -80,7 +84,7 @@ startEngine wc game = do
 
   -- Driving the network
   GLFW.time $= 0
-  driveNetwork network $ runInput closed
+  driveNetwork assets network $ runInput closed
 
   -- Closing the window, after all is said and done
   closeWindow
