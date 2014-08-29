@@ -50,6 +50,8 @@ library
                ,       bytestring        == 0.10.*
                ,       JuicyPixels       == 3.1.*
                ,       JuicyPixels-repa  == 0.7.*
-               ,       OpenGL
+               ,       libvorbis         == 0.1.*
+               ,       OpenAL            >= 1.6.0.0
+               ,       OpenGL            >= 2.9.0.0
 
   default-language:    Haskell2010
