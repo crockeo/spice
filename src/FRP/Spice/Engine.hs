@@ -40,9 +40,17 @@ makeWindowMode wc =
     else Window
 
 -- Resizing the window
-resizeCallback :: IORef (Vector Int) -> WindowSizeCallback
-resizeCallback wSize size@(Size w h) = do
-  writeIORef wSize $ Vector (fromIntegral w) (fromIntegral h)
+resizeCallback :: WindowSizeCallback
+resizeCallback size@(Size w' h') = do
+  let (Vector w h) = Vector (fromIntegral w' / 640) (fromIntegral h' / 480)
+
+  matrixMode $= Projection
+  loadIdentity
+  ortho (-w) w
+        (-h) h
+        (-1) 1
+
+  matrixMode $= Modelview 0
   viewport $= (Position 0 0, size)
 
 {-|
@@ -65,8 +73,7 @@ startEngine wc game = do
     return True
 
   -- Function to run on window resize
-  wSizeRef <- newIORef $ Vector (getWindowWidth wc) (getWindowHeight wc)
-  windowSizeCallback $= resizeCallback wSizeRef
+  windowSizeCallback $= resizeCallback
 
   -- Loading the assets
   assets <- performAssetLoads $ loadAssets game
@@ -75,7 +82,7 @@ startEngine wc game = do
   ic <- makeInputContainer
 
   -- Updating the input
-  mousePosCallback    $= makeMousePositionCallback ic wSizeRef
+  mousePosCallback    $= makeMousePositionCallback ic
   keyCallback         $= makeKeyboardCallback ic
   mouseButtonCallback $= makeMouseCallback ic
 

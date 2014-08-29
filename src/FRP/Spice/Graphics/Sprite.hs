@@ -4,12 +4,14 @@
 -}
 module FRP.Spice.Graphics.Sprite ( Sprite (..)
                                  , renderSprite
+                                 , renderSpriteWithSize
                                  , loadSprite
                                  ) where
 
 --------------------
 -- Global Imports --
 import Graphics.Rendering.OpenGL
+import Graphics.UI.GLFW as GLFW
 import Data.ByteString.Unsafe
 import Control.Applicative
 import Codec.Picture.Repa
@@ -19,7 +21,6 @@ import Foreign.Ptr
 
 -------------------
 -- Local Imports --
-import FRP.Spice.Graphics.Color
 import FRP.Spice.Graphics.Scene
 import FRP.Spice.Graphics.Utils
 import FRP.Spice.Math
@@ -30,11 +31,12 @@ import FRP.Spice.Math
 {-|
   Getting the size from a @'DynamicImage'@.
 -}
-getInfo :: DynamicImage -> (Int, Int, PixelInternalFormat)
-getInfo (ImageRGB8   (Image w h _)) = (w, h, RGB8)
-getInfo (ImageRGB16  (Image w h _)) = (w, h, RGB16)
-getInfo (ImageRGBA8  (Image w h _)) = (w, h, RGBA8)
-getInfo (ImageRGBA16 (Image w h _)) = (w, h, RGBA16)
+getInfo :: DynamicImage -> Either String (Int, Int, PixelInternalFormat)
+getInfo (ImageRGB8   (Image w h _)) = Right (w, h, RGB8)
+getInfo (ImageRGB16  (Image w h _)) = Right (w, h, RGB16)
+getInfo (ImageRGBA8  (Image w h _)) = Right (w, h, RGBA8)
+getInfo (ImageRGBA16 (Image w h _)) = Right (w, h, RGBA16)
+getInfo _                           = Left "Unsupported image type."
 
 {-|
   Loading a @'TextureObject'@ and @'Size'@ from any RGB8, RGB16, RGBA8, or
@@ -45,7 +47,7 @@ loadTex path = do
   img <- either error id <$> readImageRGBA path
 
   let dynimg         = imgToImage img
-      (w, h, format) = getInfo dynimg
+      (w, h, format) = either error id $ getInfo dynimg
       glSize         = TextureSize2D (fromIntegral w) (fromIntegral h)
       bs             = toByteString img
 
@@ -95,17 +97,26 @@ renderSprite sprite pos = do
           ]
 
 {-|
+  Running @'renderSprite'@ on a @'Sprite'@, but with a given size.
+-}
+renderSpriteWithSize :: Sprite -> Vector Float -> Vector Float -> Scene
+renderSpriteWithSize sprite pos size = renderSprite (sprite { spriteSize = size }) pos
+
+{-|
   Creating a @'Sprite'@ from a @'TextureObject'@.
 -}
-makeSprite :: (TextureObject, Size) -> Sprite
-makeSprite (to, (Size w h)) =
+makeSprite :: Size -> (TextureObject, Size) -> Sprite
+makeSprite (Size ww wh) (to, (Size w h)) =
   Sprite { spriteTex   = to
          , spriteSize  = size
          }
-  where size = Vector ((fromIntegral w) / 640) ((fromIntegral h) / 480)
+  where size = Vector ((fromIntegral w) / (fromIntegral ww))
+                      ((fromIntegral h) / (fromIntegral wh))
 
 {-|
   Loading a @'Sprite'@ from a file.
 -}
 loadSprite :: FilePath -> IO Sprite
-loadSprite = liftM makeSprite . loadTex
+loadSprite path = do
+  size <- get windowSize
+  liftM (makeSprite size) $ loadTex path

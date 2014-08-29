@@ -5,11 +5,10 @@ module FRP.Spice.Input.Backend where
 
 --------------------
 -- Global Imports --
+import FRP.Elerea.Param hiding (input)
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
-import FRP.Elerea.Param
 import Data.Map.Strict
-import Data.IORef
 
 -------------------
 -- Local Imports --
@@ -71,12 +70,12 @@ makeInputContainer = do
 {-|
   Creating a callback to update the mouse position's state.
 -}
-makeMousePositionCallback :: InputContainer -> IORef (Vector Int) -> MousePosCallback
-makeMousePositionCallback ic wSizeRef (Position x y) = do
-  (Vector w h) <- readIORef wSizeRef
+makeMousePositionCallback :: InputContainer -> MousePosCallback
+makeMousePositionCallback ic(Position x y) = do
+  (Size w h) <- get windowSize
   mousePositionSinks (getSinks ic) $
-    Vector (  fromIntegral x  / ((fromIntegral $ w) / 2) - 1)
-           ((-fromIntegral y) / ((fromIntegral $ h) / 2) + 1)
+    Vector (  fromIntegral x  / 320 - ((fromIntegral w) / 640))
+           ((-fromIntegral y) / 240 + ((fromIntegral h) / 480))
 
 {-|
   Creating a callback to update the keyboard's states.
