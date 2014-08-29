@@ -55,7 +55,7 @@ loadTex path = do
   [t] <- genObjectNames 1
 
   textureBinding Texture2D $= Just t
-  texImage2D Texture2D NoProxy 0 format glSize 0 (PixelData BGRA UnsignedByte ptr)
+  texImage2D Texture2D NoProxy 0 format glSize 0 (PixelData ABGR UnsignedByte ptr)
 
   return (t, Size (fromIntegral w) (fromIntegral h))
 
@@ -75,11 +75,11 @@ renderSprite sprite pos = do
   textureWrapMode Texture2D S $= (Repeated, ClampToEdge)
   textureWrapMode Texture2D T $= (Repeated, ClampToEdge)
   textureFilter   Texture2D   $= ((Linear', Nothing), Linear')
+  textureFunction             $= Replace
 
   texture        Texture2D $= Enabled
   textureBinding Texture2D $= (Just $ spriteTex sprite)
 
-  bindColor $ color4i 0 0 0 0
   renderPrimitive Quads $
     forM_ (generateCoords pos $ spriteSize sprite) $ \(Vector x y, Vector tx ty) -> do
       texCoord $ TexCoord2 (togl tx) (togl ty)

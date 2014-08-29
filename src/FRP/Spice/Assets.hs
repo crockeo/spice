@@ -63,3 +63,9 @@ performAssetLoads la =
   where performAssetLoads' :: [LoadAsset] -> Assets -> IO Assets
         performAssetLoads' []                   assets = return assets
         performAssetLoads' (LoadSprite path:xs) assets = (liftM (appendSprite assets path) $ loadSprite path) >>= performAssetLoads' xs
+
+{-|
+  Loading a @'Sprite'@ asset.
+-}
+loadSpriteAsset :: FilePath -> LoadAssets
+loadSpriteAsset = fromValues . return . LoadSprite

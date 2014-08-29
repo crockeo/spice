@@ -5,6 +5,7 @@
 module FRP.Spice ( module Graphics.UI.GLFW
                  , module Data.Map.Strict
 
+                 , module FRP.Spice.Assets
                  , module FRP.Spice.Config
                  , module FRP.Spice.Engine
                  , module FRP.Spice.Input
@@ -16,6 +17,7 @@ module FRP.Spice ( module Graphics.UI.GLFW
 import Graphics.UI.GLFW (Key (..), SpecialKey (..), MouseButton (..))
 import Data.Map.Strict ((!))
 
+import FRP.Spice.Assets
 import FRP.Spice.Config
 import FRP.Spice.Engine
 import FRP.Spice.Input
