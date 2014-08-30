@@ -1,3 +1,6 @@
+{-|
+  This module provides some mathematical operations on @'Vector'@s.
+-}
 module FRP.Spice.Internal.Math.VectorOps where
 
 --------------------
