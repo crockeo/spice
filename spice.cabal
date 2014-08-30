@@ -15,32 +15,10 @@ cabal-version:       >=1.10
 library
   ghc-options:         -Wall -fno-warn-unused-do-bind
 
-  exposed-modules:     FRP.Spice
-                       FRP.Spice.Graphics
-                       FRP.Spice.Math
+  other-modules:       FRP.Spice.Internal.Math.VectorOps
+                       FRP.Spice.Internal.Types
 
-  other-modules:       FRP.Spice.Assets
-                       FRP.Spice.Config
-                       FRP.Spice.Engine
-                       FRP.Spice.Engine.Driver
-                       FRP.Spice.Engine.Network
-                       FRP.Spice.Engine.RenderWrapper
-                       FRP.Spice.Engine.RunInput
-                       FRP.Spice.Game
-                       FRP.Spice.Graphics.Color
-                       FRP.Spice.Graphics.Geometry
-                       FRP.Spice.Graphics.Scene
-                       FRP.Spice.Graphics.Sprite
-                       FRP.Spice.Graphics.Utils
-                       FRP.Spice.Input
-                       FRP.Spice.Input.Backend
-                       FRP.Spice.Input.Keyboard
-                       FRP.Spice.Input.Mouse
-                       FRP.Spice.Input.MousePosition
-                       FRP.Spice.Math.Vector
-                       FRP.Spice.Utils.DoList
-
-  hs-source-dirs:      src/
+  hs-source-dirs:      newsrc/
 
   build-depends:       base              == 4.7.*
                ,       elerea            == 2.7.*
