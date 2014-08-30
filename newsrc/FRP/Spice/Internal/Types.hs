@@ -8,8 +8,12 @@ module FRP.Spice.Internal.Types where
 
 --------------------
 -- Global Imports --
+import qualified Graphics.Rendering.OpenGL as GL
+import qualified Graphics.UI.GLFW as GLFW
 import qualified Data.Map.Strict as Map
+import Control.Applicative
 import Data.Default
+import Data.Monoid
 
 ----------
 -- Code --
@@ -23,7 +27,7 @@ data DoListT a b = DoListT a b
 {-|
   A type synonym for the @'DoListT'@ that should be used.
 -}
-type DoList a = DoList a ()
+type DoList a = DoListT a ()
 
 {-|
   A Functor instance to satisfy the Applicative's requirements.
@@ -36,16 +40,16 @@ instance Functor (DoListT a) where
 -}
 instance Monoid a => Applicative (DoListT a) where
   pure b = DoListT mempty b
-  (DoListT a b) (DoListT a' bfn) =
-    DoListT (mappend a a') $ bfn b
+  (DoListT a' bfn) <*> (DoListT a b) =
+    DoListT (a `mappend` a') $ bfn b
 
 {-|
   The Monad instance to allow the DoList to compose through do-notation.
 -}
 instance Monoid a => Monad (DoListT a) where
   return = pure
-  dl@(DoListT a b) >>= fn =
-    let (DoListT a' b') = fn dl in
+  (DoListT a b) >>= fn =
+    let (DoListT a' b') = fn b in
       DoListT (mappend a a') b'
 
 {-|
@@ -53,7 +57,7 @@ instance Monoid a => Monad (DoListT a) where
 -}
 data WindowConfig = WindowConfig { windowWidth      :: Int
                                  , windowHeight     :: Int
-                                 , windowFullscreen :: Boolean
+                                 , windowFullscreen :: Bool
                                  , windowTitle      :: String
                                  }
 
@@ -102,9 +106,9 @@ instance Functor Vector where
   An applicative instance to allow one to write functions on @'Vector'@s that
   have separate functions for both values.
 -}
-instance Functor Vector where
+instance Applicative Vector where
   pure a = Vector a a
-  (Vector x y) <*> (Vector fnx fny) =
+  (Vector fnx fny) <*> (Vector x y) =
     Vector (fnx x) (fny y)
 
 {-|
@@ -112,8 +116,8 @@ instance Functor Vector where
   keyboard keys.
 -}
 data Sinks = Sinks { mousePositionSink :: Vector Float -> IO ()
-                   , mouseButtonSink   :: Map MouseButton (Bool -> IO ())
-                   , keyboardKeySink   :: Map Key         (Bool -> IO ())
+                   , mouseButtonSink   :: Map.Map GLFW.MouseButton (Bool -> IO ())
+                   , keyboardKeySink   :: Map.Map GLFW.Key         (Bool -> IO ())
                    }
 
 {-|
@@ -122,8 +126,8 @@ data Sinks = Sinks { mousePositionSink :: Vector Float -> IO ()
   and referencing.
 -}
 data Input = Input { mousePosition :: Vector Float
-                   , mouseButton   :: Map MouseButton Bool
-                   , keyboardKey   :: Map Key         Bool
+                   , mouseButton   :: Map.Map GLFW.MouseButton Bool
+                   , keyboardKey   :: Map.Map GLFW.Key         Bool
                    }
 
 {-|
@@ -133,6 +137,14 @@ data Input = Input { mousePosition :: Vector Float
 data InputContainer = InputContainer { getSinks :: Sinks
                                      , getInput :: Input
                                      }
+
+{-|
+  Containing all of the necessary information for rendering an image on screen
+  (aside from the position where the sprite should be rendered.)
+-}
+data Sprite = Sprite { spriteTex  :: GL.TextureObject
+                     , spriteSize :: Vector Float
+                     }
 
 {-|
   Representing the loading of an asset into the game framework.
