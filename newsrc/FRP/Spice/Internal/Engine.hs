@@ -84,6 +84,11 @@ driveNetwork assets network iomdriver = do
       game <- network driver
       render assets game
       driveNetwork assets network iomdriver
+  where renderWrapper :: Scene -> IO ()
+        renderWrapper scene = do
+          clear [ColorBuffer]
+          scene
+          swapBuffers
 
 {-|
   Starting the engine with window parameters described within the provided
