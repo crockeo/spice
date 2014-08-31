@@ -14,4 +14,4 @@ import FRP.Spice.Internal.Types
   Creating a @'LoadAsset'@ call to load a @'Sprite'@.
 -}
 loadSpriteAsset :: FilePath -> LoadAssets
-loadSpriteAsset path = DoListT (LoadSprite path) ()
+loadSpriteAsset path = DoListT [LoadSprite path] ()
