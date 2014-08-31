@@ -15,7 +15,9 @@ cabal-version:       >=1.10
 library
   ghc-options:         -Wall -fno-warn-unused-do-bind
 
-  other-modules:       FRP.Spice.Internal.Engine
+  other-modules:       FRP.Spice.Internal.Assets
+                       FRP.Spice.Internal.Engine
+                       FRP.Spice.Internal.Input
                        FRP.Spice.Internal.Math.VectorOps
                        FRP.Spice.Internal.Types
 
