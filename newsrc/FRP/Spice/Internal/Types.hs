@@ -8,10 +8,11 @@ module FRP.Spice.Internal.Types where
 
 --------------------
 -- Global Imports --
-import qualified Graphics.Rendering.OpenGL as GL
-import qualified Graphics.UI.GLFW as GLFW
 import qualified Data.Map.Strict as Map
+import Graphics.Rendering.OpenGL
+import Graphics.UI.GLFW as GLFW
 import Control.Applicative
+import FRP.Elerea.Param
 import Data.Default
 import Data.Monoid
 
@@ -55,20 +56,20 @@ instance Monoid a => Monad (DoListT a) where
 {-|
   The config that is used to define the GLFW window's properties.
 -}
-data WindowConfig = WindowConfig { windowWidth      :: Int
-                                 , windowHeight     :: Int
-                                 , windowFullscreen :: Bool
-                                 , windowTitle      :: String
+data WindowConfig = WindowConfig { getWindowWidth      :: Int
+                                 , getWindowHeight     :: Int
+                                 , getWindowFullscreen :: Bool
+                                 , getWindowTitle      :: String
                                  }
 
 {-|
   The default state for a @'WindowConfig'@.
 -}
 instance Default WindowConfig where
-  def = WindowConfig { windowWidth      = 640
-                     , windowHeight     = 480
-                     , windowFullscreen = True
-                     , windowTitle      = "Spice Application"
+  def = WindowConfig { getWindowWidth      = 640
+                     , getWindowHeight     = 480
+                     , getWindowFullscreen = True
+                     , getWindowTitle      = "Spice Application"
                      }
 
 {-|
@@ -115,9 +116,9 @@ instance Applicative Vector where
   A wrapper around the sinks for the mouse position, mouse buttons, and
   keyboard keys.
 -}
-data Sinks = Sinks { mousePositionSink :: Vector Float -> IO ()
-                   , mouseButtonSink   :: Map.Map GLFW.MouseButton (Bool -> IO ())
-                   , keyboardKeySink   :: Map.Map GLFW.Key         (Bool -> IO ())
+data Sinks = Sinks { mousePosSink    :: Vector Float -> IO ()
+                   , mouseButtonSink :: Map.Map MouseButton (Bool -> IO ())
+                   , keySink         :: Map.Map Key         (Bool -> IO ())
                    }
 
 {-|
@@ -125,9 +126,9 @@ data Sinks = Sinks { mousePositionSink :: Vector Float -> IO ()
   @'InputContainer'@ along with the @'Sink'@ to handle all input -- updating
   and referencing.
 -}
-data Input = Input { mousePosition :: Vector Float
-                   , mouseButton   :: Map.Map GLFW.MouseButton Bool
-                   , keyboardKey   :: Map.Map GLFW.Key         Bool
+data Input = Input { mousePos    :: Vector Float
+                   , mouseButton :: Map.Map MouseButton Bool
+                   , key         :: Map.Map Key         Bool
                    }
 
 {-|
@@ -135,14 +136,14 @@ data Input = Input { mousePosition :: Vector Float
   a @'Signal'@ so it may be used within the FRP/Elerea part of the framework.
 -}
 data InputContainer = InputContainer { getSinks :: Sinks
-                                     , getInput :: Input
+                                     , getInput :: Signal Input
                                      }
 
 {-|
   Containing all of the necessary information for rendering an image on screen
   (aside from the position where the sprite should be rendered.)
 -}
-data Sprite = Sprite { spriteTex  :: GL.TextureObject
+data Sprite = Sprite { spriteTex  :: TextureObject
                      , spriteSize :: Vector Float
                      }
 
