@@ -24,8 +24,5 @@ import FRP.Spice.Graphics.Scene
 renderWrapper :: Scene -> IO ()
 renderWrapper scene = do
   clear [ColorBuffer]
-
   scene
-
-  flush
   swapBuffers
