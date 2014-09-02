@@ -16,31 +16,15 @@ library
   ghc-options:         -Wall -fno-warn-unused-do-bind
 
   exposed-modules:     FRP.Spice
-                       FRP.Spice.Graphics
-                       FRP.Spice.Math
 
-  other-modules:       FRP.Spice.Assets
-                       FRP.Spice.Config
-                       FRP.Spice.Engine
-                       FRP.Spice.Engine.Driver
-                       FRP.Spice.Engine.Network
-                       FRP.Spice.Engine.RenderWrapper
-                       FRP.Spice.Engine.RunInput
-                       FRP.Spice.Game
-                       FRP.Spice.Graphics.Color
-                       FRP.Spice.Graphics.Geometry
-                       FRP.Spice.Graphics.Scene
-                       FRP.Spice.Graphics.Sprite
-                       FRP.Spice.Graphics.Utils
-                       FRP.Spice.Input
-                       FRP.Spice.Input.Backend
-                       FRP.Spice.Input.Keyboard
-                       FRP.Spice.Input.Mouse
-                       FRP.Spice.Input.MousePosition
-                       FRP.Spice.Math.Vector
-                       FRP.Spice.Utils.DoList
+  other-modules:       FRP.Spice.Internal.Assets
+                       FRP.Spice.Internal.Engine
+                       FRP.Spice.Internal.Input
+                       FRP.Spice.Internal.LoadAssets
+                       FRP.Spice.Internal.Math
+                       FRP.Spice.Internal.Types
 
-  hs-source-dirs:      src/
+  hs-source-dirs:      newsrc/
 
   build-depends:       base              == 4.7.*
                ,       elerea            == 2.7.*
@@ -50,8 +34,6 @@ library
                ,       bytestring        == 0.10.*
                ,       JuicyPixels       == 3.1.*
                ,       JuicyPixels-repa  == 0.7.*
-               ,       libvorbis         == 0.1.*
-               ,       OpenAL            >= 1.6.0.0
                ,       OpenGL            >= 2.9.0.0
 
   default-language:    Haskell2010
