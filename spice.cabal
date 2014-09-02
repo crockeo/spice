@@ -24,7 +24,7 @@ library
                        FRP.Spice.Internal.Math
                        FRP.Spice.Internal.Types
 
-  hs-source-dirs:      newsrc/
+  hs-source-dirs:      src/
 
   build-depends:       base              == 4.7.*
                ,       elerea            == 2.7.*
