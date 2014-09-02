@@ -1,7 +1,8 @@
 {-|
-  This module provides some mathematical operations on @'Vector'@s.
+  This module provides a number of functions having to do with mathematical
+  calculation in the context of the Spice library.
 -}
-module FRP.Spice.Internal.Math.VectorOps where
+module FRP.Spice.Internal.Math where
 
 --------------------
 -- Global Imports --

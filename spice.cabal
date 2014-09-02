@@ -21,7 +21,7 @@ library
                        FRP.Spice.Internal.Engine
                        FRP.Spice.Internal.Input
                        FRP.Spice.Internal.LoadAssets
-                       FRP.Spice.Internal.Math.VectorOps
+                       FRP.Spice.Internal.Math
                        FRP.Spice.Internal.Types
 
   hs-source-dirs:      newsrc/
