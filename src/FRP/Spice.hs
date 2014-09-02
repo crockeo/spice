@@ -1,24 +1,27 @@
 {-|
-  This module re-exports some other modules in the spice library so that you
-  needn't import all of them explicitly.
+  This module re-exports the core elements of the library, along with all of
+  the types housed within the library.
 -}
 module FRP.Spice ( module Graphics.UI.GLFW
                  , module Data.Map.Strict
 
-                 , module FRP.Spice.Assets
-                 , module FRP.Spice.Config
-                 , module FRP.Spice.Engine
-                 , module FRP.Spice.Input
-                 , module FRP.Spice.Game
+                 , module FRP.Spice.Internal.LoadAssets
+                 , module FRP.Spice.Internal.Graphics
+                 , module FRP.Spice.Internal.Engine
+                 , module FRP.Spice.Internal.Types
+                 , module FRP.Spice.Internal.Math
                  ) where
 
------------------------
--- Rexported Imports --
-import Graphics.UI.GLFW (Key (..), SpecialKey (..), MouseButton (..))
+-------------------------
+-- Re-exported Modules --
+import Graphics.UI.GLFW ( MouseButton (..)
+                        , SpecialKey (..)
+                        , Key (..)
+                        )
 import Data.Map.Strict ((!))
 
-import FRP.Spice.Assets
-import FRP.Spice.Config
-import FRP.Spice.Engine
-import FRP.Spice.Input
-import FRP.Spice.Game
+import FRP.Spice.Internal.LoadAssets
+import FRP.Spice.Internal.Graphics
+import FRP.Spice.Internal.Engine
+import FRP.Spice.Internal.Types
+import FRP.Spice.Internal.Math
