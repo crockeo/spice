@@ -68,7 +68,7 @@ data WindowConfig = WindowConfig { getWindowWidth      :: Int
 instance Default WindowConfig where
   def = WindowConfig { getWindowWidth      = 640
                      , getWindowHeight     = 480
-                     , getWindowFullscreen = True
+                     , getWindowFullscreen = False
                      , getWindowTitle      = "Spice Application"
                      }
 
