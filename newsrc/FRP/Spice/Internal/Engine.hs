@@ -82,7 +82,7 @@ driveNetwork assets network iomdriver = do
     Nothing     -> return ()
     Just driver -> do
       game <- network driver
-      render assets game
+      renderWrapper $ render assets game
       driveNetwork assets network iomdriver
   where renderWrapper :: Scene -> IO ()
         renderWrapper scene = do
