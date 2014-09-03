@@ -85,7 +85,19 @@ black = color3i 0 0 0
   The color white.
 -}
 white :: Color
-white = color3i 1 1 1
+white = color3i 255 255 255
+
+{-|
+  The color gray.
+-}
+grey :: Color
+grey = color3i 255 255 255
+
+{-|
+  A synonym for the color grey.
+-}
+gray :: Color
+gray = grey
 
 {-|
   The color red.
