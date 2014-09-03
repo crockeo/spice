@@ -8,6 +8,8 @@ module FRP.Spice.Internal.Graphics ( bindColor
                                    , color3i
                                    , black
                                    , white
+                                   , grey
+                                   , gray
                                    , red
                                    , green
                                    , blue
