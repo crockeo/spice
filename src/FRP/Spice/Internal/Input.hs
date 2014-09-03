@@ -15,7 +15,6 @@ import qualified Data.Traversable as T
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLFW as GLFW
 import Data.Map.Strict ((!))
-import Control.Applicative
 import FRP.Elerea.Param
 import Control.Monad
 
@@ -81,13 +80,13 @@ makeInputContainer :: IO InputContainer
 makeInputContainer = do
   (mpSing, mpSink) <- mousePosExternal
 
-  mouseButtonExternal <- mouseButtonExternal
-  keyExternal         <- keyExternal
+  mouseButtonEx <- mouseButtonExternal
+  keyEx         <- keyExternal
 
-  let mbSing = Map.map fst mouseButtonExternal
-      mbSink = Map.map snd mouseButtonExternal
-      kSing  = Map.map fst keyExternal
-      kSink  = Map.map snd keyExternal
+  let mbSing = Map.map fst mouseButtonEx
+      mbSink = Map.map snd mouseButtonEx
+      kSing  = Map.map fst keyEx
+      kSink  = Map.map snd keyEx
 
       sing = do
         a <- mpSing

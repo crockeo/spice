@@ -49,6 +49,13 @@ infixl 7 ^*
 (^*) v1 v2 = pure (*) <*> v1 <*> v2
 
 {-|
+  The dot product of two @'Vector'@s.
+-}
+infixl 7 ^.
+(^.) :: Num a => Vector a -> Vector a -> a
+(^.) (Vector x1 y1) (Vector x2 y2) = x1 * x2 + y1 * y2
+
+{-|
   Adding a @'Vector'@ and a given number. Effectively the same as calling (^+)
   on a @'Vector'@ and a @'Vector'@ n n.
 -}
@@ -71,3 +78,10 @@ infixl 6 ^->
 infixl 7 ^*>
 (^*>) :: Num a => Vector a -> a -> Vector a
 (^*>) v n = pure (*) <*> v <*> pure n
+
+{-|
+  The dot product of two @'Vector'@s.
+-}
+infixl 7 ^.>
+(^.>) :: Num a => Vector a -> a -> a
+(^.>) (Vector x1 y1) n = x1 * n + y1 * n
