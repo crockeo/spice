@@ -37,7 +37,7 @@ closeCallback closedRef = do
 -}
 resizeCallback :: WindowSizeCallback
 resizeCallback size@(Size w' h') = do
-  let (Vector w h) = Vector (fromIntegral w') (fromIntegral h')
+  let (Vector w h) = Vector (fromIntegral w' / 640) (fromIntegral h' / 480)
 
   matrixMode $= Projection
   loadIdentity
@@ -61,6 +61,7 @@ makeNetwork game inputSignal = start $ transfer game update inputSignal
 -}
 runInput :: IORef Bool -> IO (Maybe DeltaTime)
 runInput closedRef = do
+  pollEvents
   closed <- readIORef closedRef
 
   t <- get time
