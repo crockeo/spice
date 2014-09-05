@@ -1,5 +1,6 @@
 {-|
-
+  This module provides an API to render primitives and @'Sprite'@s within the
+  framework.
 -}
 module FRP.Spice.Internal.Graphics ( bindColor
                                    , color4f

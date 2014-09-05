@@ -23,6 +23,7 @@ library
                        FRP.Spice.Internal.Input
                        FRP.Spice.Internal.LoadAssets
                        FRP.Spice.Internal.Math
+                       FRP.Spice.Internal.Sound
                        FRP.Spice.Internal.Types
 
   hs-source-dirs:      src/
