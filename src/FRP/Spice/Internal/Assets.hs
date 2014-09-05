@@ -64,11 +64,24 @@ loadSprite path = do
                  }
 
 {-|
+  Loading a @'Sound'@ from the file system at the @'FilePath'@ specified.
+-}
+loadSound :: FilePath -> IO Sound
+loadSound path = return Sound
+
+{-|
   Appending a @'Sprite'@ to an @'Assets'@.
 -}
 appendSprite :: Assets -> FilePath -> Sprite -> Assets
 appendSprite assets path sprite =
   assets { sprites = Map.insert path sprite $ sprites assets }
+
+{-|
+  Appending a @'Sound'@ to an @'Assets'@.
+-}
+appendSound :: Assets -> FilePath -> Sound -> Assets
+appendSound assets path sound =
+  assets { sounds = Map.insert path sound $ sounds assets }
 
 {-|
   Performing all of the @'LoadAsset'@ commands contained in a @'LoadAssets'@.
@@ -79,3 +92,4 @@ performAssetLoads (DoListT las _) =
   where performAssetLoads' :: [LoadAsset] -> Assets -> IO Assets
         performAssetLoads' []                     assets = return assets
         performAssetLoads' ((LoadSprite path):xs) assets = (liftM (appendSprite assets path) $ loadSprite path) >>= performAssetLoads' xs
+        performAssetLoads' ((LoadSound  path):xs) assets = (liftM (appendSound  assets path) $ loadSound  path) >>= performAssetLoads' xs

@@ -148,9 +148,15 @@ data Sprite = Sprite { spriteTex  :: TextureObject
                      }
 
 {-|
+  Containing all necessary information for playing a sound.
+-}
+data Sound = Sound
+
+{-|
   Representing the loading of an asset into the game framework.
 -}
 data LoadAsset = LoadSprite FilePath
+               | LoadSound FilePath
 
 {-|
   A @'DoList'@ synonym for @'LoadAsset'@.
@@ -160,13 +166,17 @@ type LoadAssets = DoList [LoadAsset]
 {-|
   Storing the loaded assets in a single data structure.
 -}
-data Assets = Assets { sprites :: Map.Map FilePath Sprite }
+data Assets = Assets { sprites :: Map.Map FilePath Sprite
+                     , sounds  :: Map.Map FilePath Sound
+                     }
 
 {-|
   The default state for an @'Assets'@.
 -}
 instance Default Assets where
-  def = Assets { sprites = Map.fromList [] }
+  def = Assets { sprites = Map.fromList []
+               , sounds  = Map.fromList []
+               }
 
 {-|
   A type synonym to imply that functions performed in this function should
